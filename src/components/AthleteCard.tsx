@@ -1,6 +1,8 @@
+import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import { Calendar, DollarSign, CheckCircle, XCircle } from "lucide-react";
 
 interface AthleteCardProps {
@@ -60,6 +62,12 @@ export function AthleteCard({ athlete }: AthleteCardProps) {
             </span>
           </div>
         </div>
+        
+        <Link to={`/athlete/${athlete.id}`}>
+          <Button variant="outline" className="w-full mt-3 border-border hover:bg-sport-accent">
+            Zobacz szczegóły
+          </Button>
+        </Link>
       </CardContent>
     </Card>
   );

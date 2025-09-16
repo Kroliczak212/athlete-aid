@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -133,9 +134,11 @@ export default function TrainingPlans() {
                       }}
                     />
                   </div>
-                  <Button variant="outline" className="w-full mt-3 border-border hover:bg-sport-accent">
-                    Edytuj Plan
-                  </Button>
+                  <Link to={`/training/plan/${plan.id}`}>
+                    <Button variant="outline" className="w-full mt-3 border-border hover:bg-sport-accent">
+                      Zobacz szczegóły
+                    </Button>
+                  </Link>
                 </CardContent>
               </Card>
             ))}
@@ -209,9 +212,11 @@ export default function TrainingPlans() {
                   <CardDescription>Szablon dla: {template.sport}</CardDescription>
                 </CardHeader>
                 <CardContent>
+                <Link to={`/training/template/${template.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}>
                   <Button variant="outline" className="w-full border-border hover:bg-sport-accent">
-                    Użyj Szablonu
+                    Zobacz szablon
                   </Button>
+                </Link>
                 </CardContent>
               </Card>
             ))}

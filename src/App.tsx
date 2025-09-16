@@ -6,8 +6,13 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { DashboardLayout } from "./components/DashboardLayout";
 import CRMDashboard from "./pages/CRMDashboard";
 import TrainingPlans from "./pages/TrainingPlans";
+import TrainingPlanDetails from "./pages/TrainingPlanDetails";
+import AthleteProfile from "./pages/AthleteProfile";
+import TemplateDetails from "./pages/TemplateDetails";
 import AIAnalyzer from "./pages/AIAnalyzer";
 import MotionAnalysis from "./pages/MotionAnalysis";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -18,16 +23,28 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <DashboardLayout>
-          <Routes>
-            <Route path="/" element={<CRMDashboard />} />
-            <Route path="/training" element={<TrainingPlans />} />
-            <Route path="/analyzer" element={<AIAnalyzer />} />
-            <Route path="/motion" element={<MotionAnalysis />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </DashboardLayout>
+        <Routes>
+          {/* Auth routes - without dashboard layout */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          
+          {/* Dashboard routes - with layout */}
+          <Route path="/*" element={
+            <DashboardLayout>
+              <Routes>
+                <Route path="/" element={<CRMDashboard />} />
+                <Route path="/athlete/:id" element={<AthleteProfile />} />
+                <Route path="/training" element={<TrainingPlans />} />
+                <Route path="/training/plan/:id" element={<TrainingPlanDetails />} />
+                <Route path="/training/template/:id" element={<TemplateDetails />} />
+                <Route path="/analyzer" element={<AIAnalyzer />} />
+                <Route path="/motion" element={<MotionAnalysis />} />
+                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </DashboardLayout>
+          } />
+        </Routes>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

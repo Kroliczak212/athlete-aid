@@ -47,6 +47,12 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // Sport-specific colors
+        sport: {
+          primary: "hsl(var(--sport-primary))",
+          accent: "hsl(var(--sport-accent))",
+          hover: "hsl(var(--sport-hover))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",

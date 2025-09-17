@@ -8,7 +8,7 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Sporty Black & White Theme */
+    /* Green Athletic Theme */
     --background: 0 0% 100%;
     --foreground: 0 0% 8%;
 
@@ -18,37 +18,41 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 8%;
 
-    --primary: 0 0% 8%;
+    --primary: 120 100% 25%;
     --primary-foreground: 0 0% 98%;
 
-    --secondary: 0 0% 96%;
-    --secondary-foreground: 0 0% 20%;
+    --secondary: 120 20% 95%;
+    --secondary-foreground: 120 40% 20%;
 
-    --muted: 0 0% 96%;
+    --muted: 120 10% 96%;
     --muted-foreground: 0 0% 45%;
 
-    --accent: 0 0% 92%;
-    --accent-foreground: 0 0% 15%;
+    --accent: 120 30% 92%;
+    --accent-foreground: 120 60% 15%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 0 0% 90%;
-    --input: 0 0% 90%;
-    --ring: 0 0% 8%;
+    --border: 120 10% 90%;
+    --input: 120 10% 90%;
+    --ring: 120 100% 25%;
 
     /* Sport-specific design tokens */
-    --sport-primary: 0 0% 5%;
-    --sport-accent: 0 0% 88%;
-    --sport-hover: 0 0% 12%;
+    --sport-primary: 120 100% 20%;
+    --sport-accent: 120 20% 88%;
+    --sport-hover: 120 100% 30%;
+    --sport-success: 142 76% 36%;
+    --sport-warning: 38 92% 50%;
     
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(0 0% 8%), hsl(0 0% 15%));
-    --gradient-subtle: linear-gradient(180deg, hsl(0 0% 98%), hsl(0 0% 95%));
+    --gradient-primary: linear-gradient(135deg, hsl(120 100% 25%), hsl(120 100% 35%));
+    --gradient-subtle: linear-gradient(180deg, hsl(120 20% 98%), hsl(120 10% 95%));
+    --gradient-green: linear-gradient(135deg, hsl(120 60% 50%), hsl(142 76% 36%));
     
     /* Shadows */
-    --shadow-sport: 0 4px 20px -4px hsl(0 0% 8% / 0.15);
-    --shadow-card: 0 2px 10px -2px hsl(0 0% 8% / 0.1);
+    --shadow-sport: 0 4px 20px -4px hsl(120 100% 25% / 0.15);
+    --shadow-card: 0 2px 10px -2px hsl(120 100% 25% / 0.1);
+    --shadow-green: 0 8px 32px -8px hsl(120 60% 50% / 0.3);
     
     /* Athletic spacing */
     --spacing-athletic: 1.25rem;

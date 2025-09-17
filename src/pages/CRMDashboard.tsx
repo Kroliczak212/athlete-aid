@@ -12,7 +12,9 @@ import {
 } from "@/components/ui/select";
 import { AthleteCard } from "@/components/AthleteCard";
 import { AddAthleteDialog } from "@/components/AddAthleteDialog";
-import { Users, TrendingUp, Calendar, DollarSign, Search, Filter } from "lucide-react";
+import { TrainingInputDialog } from "@/components/TrainingInputDialog";
+import { FeedbackDialog } from "@/components/FeedbackDialog";
+import { Users, TrendingUp, Calendar, DollarSign, Search, Filter, Plus, MessageSquare } from "lucide-react";
 
 // Mock data
 const mockAthletes = [
@@ -74,10 +76,10 @@ export default function CRMDashboard() {
   const uniqueSports = [...new Set(mockAthletes.map(a => a.sport))];
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="p-4 lg:p-6 space-y-6">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">CRM Sportowców</h1>
+          <h1 className="text-2xl lg:text-3xl font-bold tracking-tight">CRM Sportowców</h1>
           <p className="text-muted-foreground">
             Zarządzaj podopiecznymi, sesjami i płatnościami
           </p>
@@ -111,7 +113,7 @@ export default function CRMDashboard() {
             Filtry i Wyszukiwanie
           </CardTitle>
         </CardHeader>
-        <CardContent className="flex gap-4">
+        <CardContent className="flex flex-col sm:flex-row gap-4">
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
             <Input
@@ -122,7 +124,7 @@ export default function CRMDashboard() {
             />
           </div>
           <Select value={sportFilter} onValueChange={setSportFilter}>
-            <SelectTrigger className="w-48 border-input bg-background">
+            <SelectTrigger className="w-full sm:w-48 border-input bg-background">
               <SelectValue placeholder="Filtruj po sporcie" />
             </SelectTrigger>
             <SelectContent>
@@ -137,13 +139,56 @@ export default function CRMDashboard() {
         </CardContent>
       </Card>
 
+      {/* Quick Actions */}
+      <div className="grid gap-4 md:grid-cols-2">
+        <Card className="border-border bg-card">
+          <CardHeader>
+            <CardTitle className="text-lg">Szybkie Akcje - Trener</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-3">
+            <TrainingInputDialog>
+              <Button className="w-full bg-primary hover:bg-sport-hover text-primary-foreground">
+                <Plus className="mr-2 h-4 w-4" />
+                Dodaj Nowy Trening
+              </Button>
+            </TrainingInputDialog>
+            <FeedbackDialog>
+              <Button variant="outline" className="w-full border-border hover:bg-sport-accent">
+                <MessageSquare className="mr-2 h-4 w-4" />
+                Wyślij Uwagi Sportowcowi
+              </Button>
+            </FeedbackDialog>
+          </CardContent>
+        </Card>
+
+        <Card className="border-border bg-card">
+          <CardHeader>
+            <CardTitle className="text-lg">Statystyki Treningów</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Dzisiaj zaplanowane:</span>
+              <span className="font-medium">8 sesji</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Ten tydzień:</span>
+              <span className="font-medium">24 treningi</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Średnia obecność:</span>
+              <span className="font-medium text-sport-success">92%</span>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
       {/* Athletes Grid */}
       <div>
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
           <h2 className="text-xl font-semibold">
             Podopieczni ({filteredAthletes.length})
           </h2>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <Badge variant="secondary" className="bg-sport-accent">
               {mockAthletes.filter(a => a.paid).length} opłaconych
             </Badge>

@@ -52,6 +52,8 @@ export default {
           primary: "hsl(var(--sport-primary))",
           accent: "hsl(var(--sport-accent))",
           hover: "hsl(var(--sport-hover))",
+          success: "hsl(var(--sport-success))",
+          warning: "hsl(var(--sport-warning))",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",

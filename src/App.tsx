@@ -8,6 +8,7 @@ import CRMDashboard from "./pages/CRMDashboard";
 import TrainingPlans from "./pages/TrainingPlans";
 import TrainingPlanDetails from "./pages/TrainingPlanDetails";
 import AthleteProfile from "./pages/AthleteProfile";
+import AthleteDashboard from "./pages/AthleteDashboard";
 import TemplateDetails from "./pages/TemplateDetails";
 import AIAnalyzer from "./pages/AIAnalyzer";
 import MotionAnalysis from "./pages/MotionAnalysis";
@@ -34,6 +35,7 @@ const App = () => (
               <Routes>
                 <Route path="/" element={<CRMDashboard />} />
                 <Route path="/athlete/:id" element={<AthleteProfile />} />
+                <Route path="/athlete-dashboard" element={<AthleteDashboard />} />
                 <Route path="/training" element={<TrainingPlans />} />
                 <Route path="/training/plan/:id" element={<TrainingPlanDetails />} />
                 <Route path="/training/template/:id" element={<TemplateDetails />} />

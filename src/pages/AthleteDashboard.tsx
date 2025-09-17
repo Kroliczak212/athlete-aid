@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { MessageToTrainerDialog } from "@/components/MessageToTrainerDialog";
 import { 
   Calendar, 
   Clock, 
@@ -16,7 +17,11 @@ import {
   TrendingUp,
   Medal,
   Camera,
-  MessageSquare
+  MessageSquare,
+  Upload,
+  BarChart3,
+  Settings,
+  Bell
 } from "lucide-react";
 
 const mockAthleteData = {
@@ -73,15 +78,17 @@ export default function AthleteDashboard() {
         </div>
         <div className="flex flex-col sm:flex-row gap-2">
           <Button className="bg-primary hover:bg-sport-hover text-primary-foreground">
-            <Camera className="mr-2 h-4 w-4" />
+            <Upload className="mr-2 h-4 w-4" />
             <span className="hidden sm:inline">Wyślij dane</span>
             <span className="sm:hidden">Dane</span>
           </Button>
-          <Button variant="outline" className="border-border hover:bg-sport-accent">
-            <MessageSquare className="mr-2 h-4 w-4" />
-            <span className="hidden sm:inline">Kontakt z trenerem</span>
-            <span className="sm:hidden">Trener</span>
-          </Button>
+          <MessageToTrainerDialog>
+            <Button variant="outline" className="border-border hover:bg-sport-accent">
+              <MessageSquare className="mr-2 h-4 w-4" />
+              <span className="hidden sm:inline">Kontakt z trenerem</span>
+              <span className="sm:hidden">Trener</span>
+            </Button>
+          </MessageToTrainerDialog>
         </div>
       </div>
 
@@ -137,7 +144,7 @@ export default function AthleteDashboard() {
       </div>
 
       <Tabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-4">
-        <TabsList className="grid w-full grid-cols-3 bg-sport-accent">
+        <TabsList className="grid w-full grid-cols-4 bg-sport-accent">
           <TabsTrigger value="overview" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
             Przegląd
           </TabsTrigger>
@@ -146,6 +153,9 @@ export default function AthleteDashboard() {
           </TabsTrigger>
           <TabsTrigger value="results" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
             Wyniki
+          </TabsTrigger>
+          <TabsTrigger value="dashboard" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+            Dashboard
           </TabsTrigger>
         </TabsList>
 
@@ -259,6 +269,119 @@ export default function AthleteDashboard() {
                         <TrendingUp className="h-3 w-3 text-sport-success" />
                         <span className="text-xs text-sport-success">{result.improvement}</span>
                       </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="dashboard" className="space-y-4">
+          <div className="grid gap-4 lg:grid-cols-2">
+            {/* Quick Actions */}
+            <Card className="border-border bg-card">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Settings className="h-5 w-5 text-primary" />
+                  Szybkie akcje
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <MessageToTrainerDialog>
+                  <Button className="w-full justify-start bg-primary hover:bg-sport-hover text-primary-foreground">
+                    <MessageSquare className="mr-2 h-4 w-4" />
+                    Wyślij wiadomość do trenera
+                  </Button>
+                </MessageToTrainerDialog>
+                <Button variant="outline" className="w-full justify-start border-border hover:bg-sport-accent">
+                  <Upload className="mr-2 h-4 w-4" />
+                  Prześlij dane z urządzenia
+                </Button>
+                <Button variant="outline" className="w-full justify-start border-border hover:bg-sport-accent">
+                  <BarChart3 className="mr-2 h-4 w-4" />
+                  Zobacz szczegółowe statystyki
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Notifications */}
+            <Card className="border-border bg-card">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Bell className="h-5 w-5 text-primary" />
+                  Powiadomienia
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="p-3 bg-green-50 dark:bg-green-950/20 border-l-4 border-l-green-500 rounded">
+                  <p className="text-sm font-medium text-green-800 dark:text-green-400">
+                    Nowy plan treningowy dostępny
+                  </p>
+                  <p className="text-xs text-green-600 dark:text-green-500 mt-1">
+                    Trener dodał plan na kolejny tydzień
+                  </p>
+                </div>
+                <div className="p-3 bg-blue-50 dark:bg-blue-950/20 border-l-4 border-l-blue-500 rounded">
+                  <p className="text-sm font-medium text-blue-800 dark:text-blue-400">
+                    Feedback od trenera
+                  </p>
+                  <p className="text-xs text-blue-600 dark:text-blue-500 mt-1">
+                    Otrzymałeś uwagi do ostatniego treningu
+                  </p>
+                </div>
+                <div className="p-3 bg-orange-50 dark:bg-orange-950/20 border-l-4 border-l-orange-500 rounded">
+                  <p className="text-sm font-medium text-orange-800 dark:text-orange-400">
+                    Przypomnienie o treningu
+                  </p>
+                  <p className="text-xs text-orange-600 dark:text-orange-500 mt-1">
+                    Trening jutro o 18:00
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Training History */}
+          <Card className="border-border bg-card">
+            <CardHeader>
+              <CardTitle>Historia treningów - ostatni tydzień</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {[
+                  { date: "16.09", type: "Technika", duration: "90 min", completed: true, rating: 4 },
+                  { date: "14.09", type: "Wytrzymałość", duration: "120 min", completed: true, rating: 5 },
+                  { date: "12.09", type: "Interwały", duration: "60 min", completed: true, rating: 3 },
+                  { date: "10.09", type: "Siła", duration: "75 min", completed: false, rating: 0 },
+                ].map((training, index) => (
+                  <div key={index} className="flex items-center justify-between p-3 bg-sport-accent rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-3 h-3 rounded-full ${
+                        training.completed ? 'bg-green-500' : 'bg-gray-400'
+                      }`} />
+                      <div>
+                        <p className="font-medium">{training.type}</p>
+                        <p className="text-sm text-muted-foreground">{training.date} • {training.duration}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {training.completed ? (
+                        <div className="flex items-center gap-1">
+                          {[...Array(5)].map((_, i) => (
+                            <div 
+                              key={i} 
+                              className={`w-3 h-3 rounded-full ${
+                                i < training.rating ? 'bg-yellow-400' : 'bg-gray-200'
+                              }`}
+                            />
+                          ))}
+                        </div>
+                      ) : (
+                        <Badge variant="secondary" className="bg-gray-100 text-gray-600">
+                          Pominięty
+                        </Badge>
+                      )}
                     </div>
                   </div>
                 ))}

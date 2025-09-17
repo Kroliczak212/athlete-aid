@@ -98,6 +98,50 @@ export default function AIAnalyzer() {
         </Button>
       </div>
 
+      {/* Athlete Selection */}
+      <Card className="border-border bg-card">
+        <CardHeader>
+          <CardTitle>Wybierz sportowca do analizy</CardTitle>
+          <CardDescription>
+            Kliknij na kartę sportowca, aby przejść do szczegółowej analizy
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+            {mockDeviceData.map((device, index) => (
+              <Card 
+                key={index} 
+                className="border-border bg-card hover:shadow-card transition-all duration-200 cursor-pointer hover:border-primary/50"
+                onClick={() => window.location.href = `/analyzer/athlete/${index + 1}`}
+              >
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="font-semibold">{device.athlete}</h3>
+                    <Badge 
+                      variant={device.connected ? "default" : "destructive"}
+                      className={device.connected ? "bg-green-100 text-green-800" : ""}
+                    >
+                      {device.connected ? "Online" : "Offline"}
+                    </Badge>
+                  </div>
+                  <p className="text-sm text-muted-foreground mb-3">{device.device}</p>
+                  <div className="grid grid-cols-2 gap-2 text-xs">
+                    <div className="flex items-center gap-1">
+                      <Heart className="h-3 w-3 text-red-500" />
+                      <span>{device.metrics.heartRate} bpm</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Activity className="h-3 w-3 text-blue-500" />
+                      <span>{device.metrics.distance}</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Device Status */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {mockDeviceData.map((device, index) => (

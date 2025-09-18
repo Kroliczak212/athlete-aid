@@ -28,7 +28,7 @@ export function AppSidebar() {
 
   return (
     <Sidebar 
-      className={`${isCollapsed ? "w-14" : "w-64"} bg-gradient-to-b from-background to-sport-accent border-border`}
+      className="bg-gradient-to-b from-background to-sport-accent border-border"
       collapsible="icon"
     >
       <SidebarContent>
@@ -40,7 +40,7 @@ export function AppSidebar() {
         
         <SidebarGroup>
           <SidebarGroupLabel className="text-sidebar-foreground px-2 py-1 text-xs font-medium">
-            {!isCollapsed && "Zarządzanie"}
+            Zarządzanie
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -51,15 +51,15 @@ export function AppSidebar() {
                       to={item.url} 
                       end
                       className={({ isActive }) => 
-                        `flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 ${
+                        `flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 text-sidebar-foreground ${
                           isActive 
-                            ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-sport font-medium" 
-                            : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                            ? "bg-primary text-primary-foreground shadow-lg font-medium" 
+                            : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                         }`
                       }
                     >
                       <item.icon className="h-5 w-5 flex-shrink-0" />
-                      {!isCollapsed && <span className="font-medium">{item.title}</span>}
+                      <span className="font-medium">{item.title}</span>
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

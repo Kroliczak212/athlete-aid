@@ -1,4 +1,4 @@
-import { Users, Calendar, BarChart3, Brain, Target } from "lucide-react";
+import { Users, Calendar, BarChart3, Brain, Target, Building2 } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 import {
@@ -15,6 +15,7 @@ import {
 
 const navigationItems = [
   { title: "CRM Sportowców", url: "/", icon: Users },
+  { title: "Panel Klubu", url: "/club", icon: Building2 },
   { title: "Panel Sportowca", url: "/athlete-dashboard", icon: Target },
   { title: "Plany Treningowe", url: "/training", icon: Calendar },
   { title: "Analizator AI", url: "/analyzer", icon: BarChart3 },

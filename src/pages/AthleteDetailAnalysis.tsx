@@ -19,7 +19,8 @@ import {
   Award,
   AlertCircle,
   CheckCircle,
-  MessageSquare
+  MessageSquare,
+  BarChart3
 } from "lucide-react";
 
 // Mock data for detailed athlete analysis
@@ -177,7 +178,7 @@ export default function AthleteDetailAnalysis() {
       </div>
 
       <Tabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-4">
-        <TabsList className="grid w-full grid-cols-3 bg-sport-accent">
+        <TabsList className="grid w-full grid-cols-4 bg-sport-accent">
           <TabsTrigger value="overview" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
             Przegląd
           </TabsTrigger>
@@ -186,6 +187,9 @@ export default function AthleteDetailAnalysis() {
           </TabsTrigger>
           <TabsTrigger value="progress" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
             Postępy
+          </TabsTrigger>
+          <TabsTrigger value="trainings" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+            Treningi
           </TabsTrigger>
         </TabsList>
 
@@ -346,6 +350,62 @@ export default function AthleteDetailAnalysis() {
               </CardContent>
             </Card>
           </div>
+        </TabsContent>
+
+        <TabsContent value="trainings" className="space-y-4">
+          <Card className="border-border bg-card">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <BarChart3 className="h-5 w-5 text-primary" />
+                Historia treningów
+              </CardTitle>
+              <CardDescription>
+                Szczegółowy przegląd wszystkich treningów z ostatniego miesiąca
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {[
+                  { date: "16.09", type: "Technika", duration: "90 min", completed: true, id: 1 },
+                  { date: "14.09", type: "Wytrzymałość", duration: "120 min", completed: true, id: 2 },
+                  { date: "12.09", type: "Interwały", duration: "60 min", completed: true, id: 3 },
+                  { date: "10.09", type: "Siła", duration: "75 min", completed: false, id: 4 },
+                  { date: "08.09", type: "Technika", duration: "85 min", completed: true, id: 5 },
+                  { date: "06.09", type: "Wytrzymałość", duration: "110 min", completed: true, id: 6 },
+                ].map((training, index) => (
+                  <div 
+                    key={index} 
+                    className="flex items-center justify-between p-3 bg-sport-accent rounded-lg cursor-pointer hover:bg-accent/80 transition-colors"
+                    onClick={() => training.completed && (window.location.href = `/training/${training.id}`)}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`w-4 h-4 rounded-full ${
+                        training.completed ? 'bg-green-500' : 'bg-gray-400'
+                      }`} />
+                      <div>
+                        <p className="font-medium">{training.type}</p>
+                        <p className="text-sm text-muted-foreground">{training.date} • {training.duration}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {training.completed ? (
+                        <Badge variant="default" className="bg-green-100 text-green-800">
+                          Ukończony
+                        </Badge>
+                      ) : (
+                        <Badge variant="secondary" className="bg-gray-100 text-gray-600">
+                          Pominięty
+                        </Badge>
+                      )}
+                      <Button variant="outline" size="sm" className="text-xs">
+                        Szczegóły
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
     </div>

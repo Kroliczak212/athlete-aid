@@ -227,7 +227,8 @@ export default function ClubDashboard() {
     const matchesSearch = trainer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          trainer.specialty.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesSport = selectedSport === "all" || trainer.specialty.toLowerCase().includes(selectedSport.toLowerCase());
-    return matchesSearch && matchesSport;
+    const hasTrainingPlans = trainer.trainingPlans && trainer.trainingPlans.length > 0;
+    return matchesSearch && matchesSport && hasTrainingPlans;
   });
 
   const allAthletes = [
@@ -473,32 +474,46 @@ export default function ClubDashboard() {
                           </div>
                         </div>
 
-                        {/* Athletes with Payment Info */}
-                        <div>
-                          <h4 className="font-medium text-sm text-muted-foreground mb-2">PODOPIECZNI</h4>
-                          <div className="space-y-2 max-h-40 overflow-y-auto">
+                        {/* Athletes Table */}
+                        <div className="col-span-4">
+                          <h4 className="font-medium text-sm text-muted-foreground mb-3">PODOPIECZNI</h4>
+                          <div className="space-y-2">
                             {trainer.athletes.map((athlete) => (
-                              <div key={athlete.id} className="p-2 bg-accent/30 rounded-lg">
-                                <div className="flex justify-between items-start mb-1">
-                                  <div className="flex-1">
-                                    <div className="font-medium text-sm">{athlete.name}</div>
-                                    <div className="text-xs text-muted-foreground">
-                                      {athlete.hoursThisMonth}h w miesiącu | {athlete.monthlyPayment} PLN
+                              <div 
+                                key={athlete.id} 
+                                className="p-3 border border-border rounded-lg hover:bg-accent/50 cursor-pointer transition-colors"
+                                onClick={() => window.location.href = `/athlete/${athlete.id}/details`}
+                              >
+                                <div className="flex items-center justify-between">
+                                  <div className="flex-1 grid grid-cols-4 gap-4">
+                                    <div>
+                                      <div className="font-medium">{athlete.name}</div>
+                                      <div className="text-xs text-muted-foreground">
+                                        {athlete.hoursThisMonth}h w miesiącu
+                                      </div>
+                                    </div>
+                                    <div className="text-center">
+                                      <div className="font-medium">{athlete.monthlyPayment} PLN</div>
+                                      <div className="text-xs text-muted-foreground">Opłata</div>
+                                    </div>
+                                    <div className="text-center">
+                                      <Badge 
+                                        variant={getPerformanceBadgeVariant(athlete.performance)} 
+                                        className="text-xs"
+                                      >
+                                        {athlete.performance}
+                                      </Badge>
+                                    </div>
+                                    <div className="text-right">
+                                      <Badge 
+                                        variant={getPaymentStatus(athlete.paid).variant as "default" | "destructive"}
+                                        className="text-xs"
+                                      >
+                                        {getPaymentStatus(athlete.paid).text}
+                                      </Badge>
                                     </div>
                                   </div>
-                                  <Badge 
-                                    variant={getPaymentStatus(athlete.paid).variant as "default" | "destructive"}
-                                    className="ml-1 text-xs"
-                                  >
-                                    {getPaymentStatus(athlete.paid).text}
-                                  </Badge>
                                 </div>
-                                <Badge 
-                                  variant={getPerformanceBadgeVariant(athlete.performance)} 
-                                  className="text-xs"
-                                >
-                                  {athlete.performance}
-                                </Badge>
                               </div>
                             ))}
                           </div>

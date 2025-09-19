@@ -12,6 +12,7 @@ import AthleteProfile from "./pages/AthleteProfile";
 import AthleteDashboard from "./pages/AthleteDashboard";
 import TemplateDetails from "./pages/TemplateDetails";
 import AthleteDetailAnalysis from "./pages/AthleteDetailAnalysis";
+import TrainingDetails from "./pages/TrainingDetails";
 import AIAnalyzer from "./pages/AIAnalyzer";
 import MotionAnalysis from "./pages/MotionAnalysis";
 import Login from "./pages/Login";
@@ -44,6 +45,8 @@ const App = () => (
                 <Route path="/training/template/:id" element={<TemplateDetails />} />
                 <Route path="/analyzer" element={<AIAnalyzer />} />
                 <Route path="/analyzer/athlete/:id" element={<AthleteDetailAnalysis />} />
+                <Route path="/training/:id" element={<TrainingDetails />} />
+                <Route path="/athlete/:id/details" element={<AthleteDetailAnalysis />} />
                 <Route path="/motion" element={<MotionAnalysis />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />

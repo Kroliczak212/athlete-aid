@@ -42,10 +42,30 @@ const mockAthleteData = {
     time: "18:00",
     duration: 90,
     exercises: [
-      "Rozgrzewka - 400m wolny styl",
-      "Technika kraul - 8x50m",
-      "Interwały - 4x100m",
-      "Wyciszenie - 200m"
+      {
+        name: "Rozgrzewka",
+        description: "Powolne rozpływanie z koncentracją na technice oddychania. Stopniowe zwiększanie tempa, aby przygotować mięśnie do głównej części treningu.",
+        details: "400m wolny styl w tempie 70% maksymalnego",
+        duration: 15
+      },
+      {
+        name: "Technika kraul",
+        description: "Praca nad poprawą techniki wioślowania. Koncentracja na wysokim łokciu i efektywnym wyciągnięciu ręki.",
+        details: "8x50m z 30s odpoczynku między powtórzeniami",
+        duration: 25
+      },
+      {
+        name: "Interwały",
+        description: "Wysokointensywna praca w strefie progowej. Utrzymanie stałego tempa i kontrola tętna.",
+        details: "4x100m z 90s odpoczynku, tempo 85% maksymalnego",
+        duration: 35
+      },
+      {
+        name: "Wyciszenie",
+        description: "Powolne pływanie relaksacyjne. Koncentracja na głębokim oddychaniu i rozluźnieniu mięśni.",
+        details: "200m wolny styl w tempie regeneracyjnym",
+        duration: 15
+      }
     ]
   },
   recentResults: [
@@ -211,7 +231,10 @@ export default function AthleteDashboard() {
                       {mockAthleteData.todaySession.exercises.slice(0, 2).map((exercise, index) => (
                         <li key={index} className="flex items-center gap-2">
                           <Circle className="h-3 w-3 text-primary" />
-                          {exercise}
+                          <div>
+                            <div className="font-medium">{exercise.name}</div>
+                            <div className="text-xs">{exercise.details}</div>
+                          </div>
                         </li>
                       ))}
                       <li className="text-xs text-muted-foreground">...i więcej</li>
@@ -234,12 +257,20 @@ export default function AthleteDashboard() {
             <CardContent>
               <div className="space-y-4">
                 {mockAthleteData.todaySession.exercises.map((exercise, index) => (
-                  <div key={index} className="flex items-center gap-3 p-3 bg-sport-accent rounded-lg">
-                    <Circle className="h-4 w-4 text-muted-foreground" />
-                    <span className="flex-1">{exercise}</span>
-                    <Button size="sm" variant="outline" className="text-xs">
-                      Ukończono
-                    </Button>
+                  <div key={index} className="p-4 bg-sport-accent rounded-lg border border-border">
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="flex-1">
+                        <div className="font-medium text-sm mb-1">{exercise.name}</div>
+                        <div className="text-sm text-muted-foreground mb-2">{exercise.description}</div>
+                        <div className="text-xs font-medium text-primary">{exercise.details}</div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Badge variant="outline" className="text-xs">{exercise.duration} min</Badge>
+                        <Button size="sm" variant="outline" className="text-xs">
+                          Ukończono
+                        </Button>
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -350,12 +381,16 @@ export default function AthleteDashboard() {
             <CardContent>
               <div className="space-y-3">
                 {[
-                  { date: "16.09", type: "Technika", duration: "90 min", completed: true, rating: 4 },
-                  { date: "14.09", type: "Wytrzymałość", duration: "120 min", completed: true, rating: 5 },
-                  { date: "12.09", type: "Interwały", duration: "60 min", completed: true, rating: 3 },
-                  { date: "10.09", type: "Siła", duration: "75 min", completed: false, rating: 0 },
+                  { date: "16.09", type: "Technika", duration: "90 min", completed: true, rating: 4, id: 1 },
+                  { date: "14.09", type: "Wytrzymałość", duration: "120 min", completed: true, rating: 5, id: 2 },
+                  { date: "12.09", type: "Interwały", duration: "60 min", completed: true, rating: 3, id: 3 },
+                  { date: "10.09", type: "Siła", duration: "75 min", completed: false, rating: 0, id: 4 },
                 ].map((training, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 bg-sport-accent rounded-lg">
+                  <div 
+                    key={index} 
+                    className="flex items-center justify-between p-3 bg-sport-accent rounded-lg cursor-pointer hover:bg-accent/80 transition-colors"
+                    onClick={() => training.completed && (window.location.href = `/training/${training.id}`)}
+                  >
                     <div className="flex items-center gap-3">
                       <div className={`w-3 h-3 rounded-full ${
                         training.completed ? 'bg-green-500' : 'bg-gray-400'

@@ -1,3 +1,4 @@
+// src/api/endpoints/auth.ts
 import { apiClient } from '@/api/client/http';
 import {
   RegisterRequest,
@@ -16,17 +17,18 @@ import {
 const base = '/api/v1/auth';
 
 export async function postRegister(body: RegisterRequest): Promise<RegisterResponse> {
-  return apiClient.post<RegisterResponse>(
+  return apiClient.request(
     `${base}/register`,
-    { body, timeoutMs: 15000 },
+    { method: 'POST', body, timeoutMs: 15000, withCredentials: true },
     RegisterResponseSchema,
   );
 }
 
 export async function postLogin(body: LoginRequest): Promise<LoginResponse> {
-  return apiClient.post<LoginResponse>(
+  // withCredentials: true -> przyjmie Set-Cookie: rt=... (HttpOnly)
+  return apiClient.request(
     `${base}/login`,
-    { body, timeoutMs: 15000 },
+    { method: 'POST', body, timeoutMs: 15000, withCredentials: true },
     LoginResponseSchema,
   );
 }
@@ -35,20 +37,36 @@ export async function postChangePassword(
   body: ChangePasswordRequest,
   authToken?: string | null,
 ): Promise<ChangePasswordResponse> {
-  return apiClient.post<ChangePasswordResponse>(
+  return apiClient.request(
     `${base}/change-password`,
-    { body, timeoutMs: 15000, authToken: authToken ?? undefined },
+    {
+      method: 'POST',
+      body,
+      timeoutMs: 15000,
+      authToken: authToken ?? undefined,
+    },
     ChangePasswordResponseSchema,
   );
 }
 
-export async function getMe(authToken?: string | null): Promise<Me> {
-  return apiClient.get<Me>(
-    `${base}/me`,
-    { timeoutMs: 15000, authToken: authToken ?? undefined },
-    MeResponseSchema,
+export async function getMe(): Promise<Me> {
+  return apiClient.get(`${base}/me`, { timeoutMs: 10000 }, MeResponseSchema);
+}
+
+// NEW: odświeżenie access tokenu z HttpOnly cookie
+export async function postRefresh(): Promise<LoginResponse> {
+  return apiClient.request(
+    `${base}/refresh`,
+    { method: 'POST', withCredentials: true, timeoutMs: 10000 },
+    LoginResponseSchema,
   );
 }
-export async function postLogout(authToken?: string | null): Promise<{ ok: boolean } | unknown> {
-  return apiClient.post(`${base}/logout`, { timeoutMs: 10000, authToken: authToken ?? undefined });
+
+// (opcjonalnie) informacja dla BE, a FE i tak czyści stan
+export async function postLogout(): Promise<{ ok: boolean } | unknown> {
+  return apiClient.request(`${base}/logout`, {
+    method: 'POST',
+    withCredentials: true,
+    timeoutMs: 8000,
+  });
 }

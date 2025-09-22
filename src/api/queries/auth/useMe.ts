@@ -1,3 +1,4 @@
+// src/api/queries/auth/useMe.ts
 import { useQuery } from '@tanstack/react-query';
 import { getMe } from '@/api/endpoints/auth';
 import { useAuth } from '@/auth/useAuth';
@@ -9,7 +10,7 @@ export function useMe() {
   return useQuery<Me>({
     queryKey: ['me'],
     queryFn: async () => {
-      const me = await getMe(accessToken ?? undefined);
+      const me = await getMe(); // ← bez argumentu
       setUser(me);
       return me;
     },

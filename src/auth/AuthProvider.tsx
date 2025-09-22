@@ -1,6 +1,12 @@
+// src/auth/AuthProvider.tsx
 import React, { createContext, useCallback, useEffect, useMemo, useState } from 'react';
 import type { Me } from '@/api/schemas/auth';
-import { setAuthTokenGetter, setOnUnauthorized } from '@/api/client/interceptors';
+import {
+  setAuthTokenGetter,
+  setOnUnauthorized,
+  setAuthTokenSetter,
+} from '@/api/client/interceptors';
+import { API_URL } from '@/api/client/config';
 
 type AuthState = {
   accessToken: string | null;
@@ -12,14 +18,10 @@ type AuthContextValue = {
   accessToken: string | null;
   tokenType: string;
   isAuthenticated: boolean;
-  /** Czy kontekst już się zhydratował z localStorage (ważne dla guardów) */
   isReady: boolean;
   user: Me | null;
-  /** Ustaw access token; persist=false => tylko w tej karcie (bez localStorage) */
   setTokens: (p: { accessToken: string; tokenType?: string; persist?: boolean }) => void;
-  /** Ustaw/wyczyść profil użytkownika */
   setUser: (u: Me | null) => void;
-  /** Wyloguj i wyczyść stan */
   logout: () => void;
 };
 
@@ -42,41 +44,11 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
   });
   const [isReady, setIsReady] = useState(false);
 
-  // 1) Hydratacja z localStorage na starcie
-  useEffect(() => {
-    const tok = localStorage.getItem('access_token');
-    const typ = localStorage.getItem('token_type') || 'Bearer';
-    if (tok) setAuth((s) => ({ ...s, accessToken: tok, tokenType: typ }));
-    setIsReady(true);
-  }, []);
-
-  // 2) Sync między kartami
-  useEffect(() => {
-    const onStorage = (e: StorageEvent) => {
-      if (e.key === 'access_token' || e.key === 'token_type') {
-        const tok = localStorage.getItem('access_token');
-        const typ = localStorage.getItem('token_type') || 'Bearer';
-        setAuth((s) => ({ ...s, accessToken: tok, tokenType: typ, user: null }));
-      }
-    };
-    window.addEventListener('storage', onStorage);
-    return () => window.removeEventListener('storage', onStorage);
-  }, []);
-
-  // 3) Udostępnij token i reakcję na 401 klientowi HTTP
-  useEffect(() => {
-    setAuthTokenGetter(() => auth.accessToken);
-  }, [auth.accessToken]);
-
-  useEffect(() => {
-    setOnUnauthorized(logout);
-  }, []);
-
   const setTokens = useCallback(
     ({
       accessToken,
       tokenType = 'Bearer',
-      persist = true,
+      persist = false,
     }: {
       accessToken: string;
       tokenType?: string;
@@ -103,6 +75,67 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
     localStorage.removeItem('refresh_token');
     localStorage.removeItem('user_email');
   }, []);
+
+  // Rejestracja integracji z klientem HTTP
+  useEffect(() => {
+    setAuthTokenGetter(() => auth.accessToken);
+    setAuthTokenSetter((token, tokenType) => {
+      if (token) {
+        setTokens({ accessToken: token, tokenType: tokenType ?? 'Bearer', persist: false });
+      } else {
+        logout();
+      }
+    });
+    // KLUCZOWA ZMIANA ↓
+    setOnUnauthorized(logout);
+  }, [auth.accessToken, logout, setTokens]);
+
+  // Sync między kartami
+  useEffect(() => {
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === 'access_token' || e.key === 'token_type') {
+        const tok = localStorage.getItem('access_token');
+        const typ = localStorage.getItem('token_type') || 'Bearer';
+        setAuth((s) => ({ ...s, accessToken: tok, tokenType: typ, user: null }));
+      }
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, []);
+
+  // Hydratacja + BOOTSTRAP REFRESH (HttpOnly cookie)
+  useEffect(() => {
+    (async () => {
+      const tok = localStorage.getItem('access_token');
+      const typ = localStorage.getItem('token_type') || 'Bearer';
+      if (tok) {
+        setAuth((s) => ({ ...s, accessToken: tok, tokenType: typ }));
+        setIsReady(true);
+        return;
+      }
+      // brak access w LS -> spróbuj odświeżyć z cookie
+      try {
+        const res = await fetch(`${API_URL}/api/v1/auth/refresh`, {
+          method: 'POST',
+          credentials: 'include',
+        });
+        if (res.ok) {
+          const data: any = await res.json().catch(() => null);
+          if (data?.access_token) {
+            setTokens({
+              accessToken: data.access_token,
+              tokenType: data.token_type ?? 'Bearer',
+              persist: false,
+            });
+          }
+        }
+      } catch {
+        // ignore
+      } finally {
+        setIsReady(true);
+      }
+    })();
+  }, [setTokens]);
 
   const value = useMemo<AuthContextValue>(
     () => ({

@@ -1,4 +1,11 @@
-import { Users, Calendar, BarChart3, Brain, Target, Building2 } from "lucide-react";
+import {
+  Users,
+  Calendar,
+  BarChart3,
+  Brain,
+  Target,
+  Building2,
+} from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 import {
@@ -14,10 +21,10 @@ import {
 } from "@/components/ui/sidebar";
 
 const navigationItems = [
-  { title: "CRM Sportowców", url: "/", icon: Users },
+  { title: "Dashboard trenera", url: "/", icon: Users },
   { title: "Panel Klubu", url: "/club", icon: Building2 },
   { title: "Panel Sportowca", url: "/athlete-dashboard", icon: Target },
-  { title: "Plany Treningowe", url: "/training", icon: Calendar },
+  { title: "Plany Treningowe trenera", url: "/training", icon: Calendar },
   { title: "Analizator AI", url: "/analyzer", icon: BarChart3 },
   { title: "Analiza Ruchu", url: "/motion", icon: Brain },
 ];
@@ -27,17 +34,19 @@ export function AppSidebar() {
   const isCollapsed = state === "collapsed";
 
   return (
-    <Sidebar 
+    <Sidebar
       className="bg-gradient-to-b from-background to-sport-accent border-border"
       collapsible="icon"
     >
       <SidebarContent>
         <div className="p-4 border-b border-border">
-          <h2 className={`font-bold text-lg ${isCollapsed ? "text-center" : ""}`}>
+          <h2
+            className={`font-bold text-lg ${isCollapsed ? "text-center" : ""}`}
+          >
             {isCollapsed ? "SA" : "SportApp"}
           </h2>
         </div>
-        
+
         <SidebarGroup>
           <SidebarGroupLabel className="text-sidebar-foreground px-2 py-1 text-xs font-medium">
             Zarządzanie
@@ -47,13 +56,13 @@ export function AppSidebar() {
               {navigationItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <NavLink 
-                      to={item.url} 
+                    <NavLink
+                      to={item.url}
                       end
-                      className={({ isActive }) => 
+                      className={({ isActive }) =>
                         `flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 text-sidebar-foreground ${
-                          isActive 
-                            ? "bg-primary text-primary-foreground shadow-lg font-medium" 
+                          isActive
+                            ? "bg-primary text-primary-foreground shadow-lg font-medium"
                             : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                         }`
                       }

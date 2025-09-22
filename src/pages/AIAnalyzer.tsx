@@ -142,62 +142,20 @@ export default function AIAnalyzer() {
         </CardContent>
       </Card>
 
-      {/* AI Insights */}
-      <Card className="border-border bg-card">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Brain className="h-5 w-5 text-primary" />
-            Analiza AI - Spostrzeżenia
-          </CardTitle>
-          <CardDescription>
-            Automatyczna analiza danych treningowych i rekomendacje
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {mockAIInsights.map((insight, index) => (
-            <div 
-              key={index}
-              className={`p-4 rounded-lg border-l-4 ${
-                insight.type === 'warning' 
-                  ? 'bg-orange-50 border-l-orange-500 dark:bg-orange-950/20' 
-                  : insight.type === 'success'
-                  ? 'bg-green-50 border-l-green-500 dark:bg-green-950/20'
-                  : 'bg-blue-50 border-l-blue-500 dark:bg-blue-950/20'
-              }`}
-            >
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
-                    <h3 className="font-semibold text-lg">{insight.title}</h3>
-                    <Badge variant="secondary" className="text-xs bg-sport-accent">
-                      {insight.athlete}
-                    </Badge>
-                  </div>
-                  <p className="text-muted-foreground mb-3">{insight.description}</p>
-                  <div className="bg-sport-accent p-3 rounded-md">
-                    <p className="text-sm font-medium">Rekomendacja:</p>
-                    <p className="text-sm text-muted-foreground">{insight.recommendation}</p>
-                  </div>
-                </div>
-                <div className="text-right ml-4">
-                  <div className="text-sm text-muted-foreground">Pewność AI</div>
-                  <div className="text-lg font-bold text-primary">{insight.confidence}%</div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </CardContent>
-      </Card>
 
       {/* Quick Actions */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {[
-          { title: "Porównaj Sportowców", icon: TrendingUp, desc: "Analiza względna" },
-          { title: "Raport Tygodniowy", icon: Activity, desc: "Podsumowanie danych" },
-          { title: "Progi Treningowe", icon: Heart, desc: "Oblicz strefy tętna" },
-          { title: "Predykcja Formy", icon: Brain, desc: "Przewiduj wydajność" }
+          { title: "Porównaj Sportowców", icon: TrendingUp, desc: "Analiza względna", route: "/analyzer/compare" },
+          { title: "Raport Tygodniowy", icon: Activity, desc: "Podsumowanie danych", route: "/analyzer/weekly-report" },
+          { title: "Progi Treningowe", icon: Heart, desc: "Oblicz strefy tętna", route: "/analyzer/training-zones" },
+          { title: "Predykcja Formy", icon: Brain, desc: "Przewiduj wydajność", route: "/analyzer/form-prediction" }
         ].map((action, index) => (
-          <Card key={index} className="border-border bg-card hover:shadow-card transition-all duration-200 cursor-pointer">
+          <Card 
+            key={index} 
+            className="border-border bg-card hover:shadow-card transition-all duration-200 cursor-pointer"
+            onClick={() => window.location.href = action.route}
+          >
             <CardContent className="p-6 text-center">
               <action.icon className="h-8 w-8 mx-auto text-primary mb-2" />
               <h3 className="font-semibold">{action.title}</h3>

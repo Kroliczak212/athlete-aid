@@ -15,6 +15,10 @@ import TemplateDetails from "./pages/TemplateDetails";
 import AthleteDetailAnalysis from "./pages/AthleteDetailAnalysis";
 import TrainingDetails from "./pages/TrainingDetails";
 import AIAnalyzer from "./pages/AIAnalyzer";
+import AthleteComparison from "./pages/AthleteComparison";
+import WeeklyReport from "./pages/WeeklyReport";
+import TrainingZones from "./pages/TrainingZones";
+import FormPrediction from "./pages/FormPrediction";
 import MotionAnalysis from "./pages/MotionAnalysis";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -45,8 +49,12 @@ const App = () => (
                 <Route path="/training" element={<TrainingPlans />} />
                 <Route path="/training/plan/:id" element={<TrainingPlanDetails />} />
                 <Route path="/training/template/:id" element={<TemplateDetails />} />
-                <Route path="/analyzer" element={<AIAnalyzer />} />
-                <Route path="/analyzer/athlete/:id" element={<AthleteDetailAnalysis />} />
+          <Route path="/analyzer" element={<AIAnalyzer />} />
+          <Route path="/analyzer/athlete/:id" element={<AthleteDetailAnalysis />} />
+          <Route path="/analyzer/compare" element={<AthleteComparison />} />
+          <Route path="/analyzer/weekly-report" element={<WeeklyReport />} />
+          <Route path="/analyzer/training-zones" element={<TrainingZones />} />
+          <Route path="/analyzer/form-prediction" element={<FormPrediction />} />
                 <Route path="/training/:id" element={<TrainingDetails />} />
                 <Route path="/athlete/:id/details" element={<AthleteDetailAnalysis />} />
                 <Route path="/motion" element={<MotionAnalysis />} />

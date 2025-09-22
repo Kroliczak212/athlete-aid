@@ -15,6 +15,7 @@ interface Exercise {
   sets?: string;
   duration?: string;
   notes?: string;
+  description?: string;
 }
 
 interface TrainingInputDialogProps {
@@ -28,6 +29,7 @@ export function TrainingInputDialog({ children, athleteName }: TrainingInputDial
   const [currentExercise, setCurrentExercise] = useState("");
   const [currentSets, setCurrentSets] = useState("");
   const [currentDuration, setCurrentDuration] = useState("");
+  const [currentDescription, setCurrentDescription] = useState("");
   const [trainingType, setTrainingType] = useState("");
   const [trainingDate, setTrainingDate] = useState("");
   const [trainingTime, setTrainingTime] = useState("");
@@ -39,12 +41,14 @@ export function TrainingInputDialog({ children, athleteName }: TrainingInputDial
         id: Date.now().toString(),
         name: currentExercise,
         sets: currentSets,
-        duration: currentDuration
+        duration: currentDuration,
+        description: currentDescription
       };
       setExercises([...exercises, newExercise]);
       setCurrentExercise("");
       setCurrentSets("");
       setCurrentDuration("");
+      setCurrentDescription("");
     }
   };
 
@@ -157,6 +161,14 @@ export function TrainingInputDialog({ children, athleteName }: TrainingInputDial
                     </Button>
                   </div>
                 </div>
+                <div className="w-full">
+                  <Textarea
+                    placeholder="Opis ćwiczenia dla trenera..."
+                    value={currentDescription}
+                    onChange={(e) => setCurrentDescription(e.target.value)}
+                    rows={2}
+                  />
+                </div>
               </div>
             </Card>
 
@@ -185,6 +197,12 @@ export function TrainingInputDialog({ children, athleteName }: TrainingInputDial
                               </div>
                             )}
                           </div>
+                          {exercise.description && (
+                            <div className="mt-2 p-2 bg-sport-accent rounded text-sm">
+                              <span className="font-medium">Opis: </span>
+                              {exercise.description}
+                            </div>
+                          )}
                         </div>
                         <Button
                           variant="outline"

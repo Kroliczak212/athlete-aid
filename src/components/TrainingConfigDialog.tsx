@@ -257,12 +257,12 @@ export function TrainingConfigDialog({ athleteName, children }: TrainingConfigDi
                 </div>
                 
                 <div>
-                  <Label className="text-xs">Uwagi</Label>
+                  <Label className="text-xs">Opis trenera</Label>
                   <Textarea
                     value={exercise.notes}
                     onChange={(e) => updateExercise(index, "notes", e.target.value)}
-                    placeholder="Dodatkowe instrukcje..."
-                    rows={2}
+                    placeholder="Szczegółowy opis ćwiczenia, technika wykonania, cele..."
+                    rows={3}
                     className="border-input bg-background resize-none"
                   />
                 </div>

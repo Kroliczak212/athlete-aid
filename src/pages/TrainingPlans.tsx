@@ -4,6 +4,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 import { 
   Calendar, 
   Clock, 
@@ -13,7 +15,9 @@ import {
   Footprints, 
   Bike,
   Dumbbell,
-  Target
+  Target,
+  Filter,
+  Search
 } from "lucide-react";
 
 const mockTrainingPlans = [
@@ -21,31 +25,56 @@ const mockTrainingPlans = [
     id: "1",
     athlete: "Anna Kowalska",
     sport: "Pływanie",
-    plan: "Plan Zaawansowany",
+    plan: "Plan Zaawansowany - Poniedziałek",
     nextSession: "15.09.2024 18:00",
     sessionsThisWeek: 3,
     totalSessions: 12,
-    icon: Waves
+    icon: Waves,
+    planType: "custom"
   },
   {
     id: "2",
-    athlete: "Tomasz Nowak", 
-    sport: "Triathlon",
-    plan: "Przygotowanie do zawodów",
-    nextSession: "16.09.2024 17:00",
-    sessionsThisWeek: 5,
-    totalSessions: 18,
-    icon: Footprints
+    athlete: "Anna Kowalska",
+    sport: "Pływanie", 
+    plan: "Plan Zaawansowany - Środa",
+    nextSession: "17.09.2024 18:00",
+    sessionsThisWeek: 3,
+    totalSessions: 12,
+    icon: Waves,
+    planType: "custom"
   },
   {
     id: "3",
+    athlete: "Tomasz Nowak", 
+    sport: "Triathlon",
+    plan: "Przygotowanie do zawodów - Tydzień 1",
+    nextSession: "16.09.2024 17:00",
+    sessionsThisWeek: 5,
+    totalSessions: 18,
+    icon: Footprints,
+    planType: "custom"
+  },
+  {
+    id: "4",
+    athlete: "Tomasz Nowak", 
+    sport: "Triathlon",
+    plan: "Przygotowanie do zawodów - Tydzień 2",
+    nextSession: "18.09.2024 17:00",
+    sessionsThisWeek: 5,
+    totalSessions: 18,
+    icon: Footprints,
+    planType: "custom"
+  },
+  {
+    id: "5",
     athlete: "Maria Wiśniewska",
     sport: "Bieganie",
     plan: "Plan dla początkujących",
     nextSession: "17.09.2024 19:00", 
     sessionsThisWeek: 2,
     totalSessions: 8,
-    icon: Footprints
+    icon: Footprints,
+    planType: "template"
   }
 ];
 
@@ -74,6 +103,20 @@ const mockWeeklySchedule = [
 
 export default function TrainingPlans() {
   const [selectedTab, setSelectedTab] = useState("plans");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedAthlete, setSelectedAthlete] = useState("all");
+  const [selectedSport, setSelectedSport] = useState("all");
+
+  const filteredPlans = mockTrainingPlans.filter(plan => {
+    const matchesSearch = plan.plan.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         plan.athlete.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesAthlete = selectedAthlete === "all" || plan.athlete === selectedAthlete;
+    const matchesSport = selectedSport === "all" || plan.sport === selectedSport;
+    return matchesSearch && matchesAthlete && matchesSport;
+  });
+
+  const athletes = Array.from(new Set(mockTrainingPlans.map(plan => plan.athlete)));
+  const sports = Array.from(new Set(mockTrainingPlans.map(plan => plan.sport)));
 
   return (
     <div className="p-6 space-y-6">
@@ -104,15 +147,65 @@ export default function TrainingPlans() {
         </TabsList>
 
         <TabsContent value="plans" className="space-y-4">
+          {/* Filters */}
+          <Card className="border-border bg-card">
+            <CardContent className="p-4">
+              <div className="flex flex-col md:flex-row gap-4">
+                <div className="flex-1">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      placeholder="Szukaj planów treningowych..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-10"
+                    />
+                  </div>
+                </div>
+                <Select value={selectedAthlete} onValueChange={setSelectedAthlete}>
+                  <SelectTrigger className="w-full md:w-48">
+                    <SelectValue placeholder="Wszystkie sportowcy" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Wszyscy sportowcy</SelectItem>
+                    {athletes.map((athlete) => (
+                      <SelectItem key={athlete} value={athlete}>
+                        {athlete}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Select value={selectedSport} onValueChange={setSelectedSport}>
+                  <SelectTrigger className="w-full md:w-48">
+                    <SelectValue placeholder="Wszystkie dyscypliny" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Wszystkie dyscypliny</SelectItem>
+                    {sports.map((sport) => (
+                      <SelectItem key={sport} value={sport}>
+                        {sport}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </CardContent>
+          </Card>
+
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {mockTrainingPlans.map((plan) => (
+            {filteredPlans.map((plan) => (
               <Card key={plan.id} className="border-border bg-card hover:shadow-card transition-all duration-200">
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <plan.icon className="h-8 w-8 text-primary" />
-                    <Badge variant="secondary" className="bg-sport-accent">
-                      {plan.sport}
-                    </Badge>
+                    <div className="flex gap-2">
+                      <Badge variant="secondary" className="bg-sport-accent">
+                        {plan.sport}
+                      </Badge>
+                      <Badge variant={plan.planType === 'custom' ? 'default' : 'outline'} className="text-xs">
+                        {plan.planType === 'custom' ? 'Custom' : 'Szablon'}
+                      </Badge>
+                    </div>
                   </div>
                   <CardTitle className="text-lg">{plan.athlete}</CardTitle>
                   <CardDescription>{plan.plan}</CardDescription>

@@ -24,12 +24,20 @@ const zoneColors = [
   { name: 'Strefa 5 - Moc beztlenowa', color: 'bg-red-100 text-red-800', range: '90-100%' },
 ];
 
+type Zone = {
+  zone: number;
+  name: string;
+  min: number;
+  max: number;
+  color: string;
+};
+
 export default function TrainingZones() {
   const [age, setAge] = useState('');
   const [maxHR, setMaxHR] = useState('');
   const [restingHR, setRestingHR] = useState('');
   const [method, setMethod] = useState('karvonen');
-  const [zones, setZones] = useState<any[]>([]);
+  const [zones, setZones] = useState<Zone[]>([]);
 
   const handleBack = () => {
     window.history.back();

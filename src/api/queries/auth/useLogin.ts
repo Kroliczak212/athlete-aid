@@ -1,20 +1,19 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { AuthAPI } from '../../endpoints/auth.api';
-import { useAuth } from '../../../auth/useAuth';
-import type { LoginRequest, LoginResponse } from '../../schemas/auth.schema';
+import { useMutation } from '@tanstack/react-query';
+import { postLogin } from '@/api/endpoints/auth';
+import type { LoginRequest } from '@/api/schemas/auth';
+import { useAuth } from '@/auth/useAuth';
 
 export function useLogin() {
   const { setTokens } = useAuth();
-  const qc = useQueryClient();
-
   return useMutation({
-    mutationFn: (payload: LoginRequest) => AuthAPI.login(payload),
-    onSuccess: (res: LoginResponse) => {
+    mutationFn: (body: LoginRequest) => postLogin(body),
+    onSuccess: (data) => {
+      // refreshToken pomijamy — FE trzyma tylko access w pamięci/LS
       setTokens({
-        accessToken: res.accessToken,
-        refreshToken: res.refreshToken ?? null,
+        accessToken: data.access_token,
+        tokenType: data.token_type,
+        // persist: true // (opcjonalnie) możesz sterować „Zapamiętaj mnie”
       });
-      qc.invalidateQueries({ queryKey: ['me'] });
     },
   });
 }

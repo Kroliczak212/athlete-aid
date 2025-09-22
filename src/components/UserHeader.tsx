@@ -1,5 +1,8 @@
-import { useState } from 'react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useMe } from '@/api/queries/auth/useMe';
+import { useLogout } from '@/api/queries/auth/useLogout';
+import { useAuth } from '@/auth/useAuth';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -9,88 +12,112 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { LogOut, Settings, User, Bell } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { LogOut, User, Settings } from 'lucide-react';
 
-interface UserHeaderProps {
-  className?: string;
-}
+const typeLabel: Record<string, string> = {
+  athlete: 'Zawodnik',
+  coach: 'Trener',
+  club: 'Klub',
+};
 
-export function UserHeader({ className }: UserHeaderProps) {
-  const [notifications] = useState(3); // Mock notification count
+export function UserHeader() {
+  const { user } = useAuth();
+  const { data: me } = useMe(); // pobiera i synchronizuje profil
+  const logoutMutation = useLogout();
+  const navigate = useNavigate();
 
-  // Mock user data - in real app this would come from auth context
-  const currentUser = {
-    name: 'Jan Kowalski',
-    email: 'jan.kowalski@sportklub.pl',
-    role: 'Trener',
-    avatar: '/placeholder.svg',
-  };
+  const profile = me ?? user;
 
-  const handleLogout = () => {
-    // In real app, this would handle actual logout
-    console.log('Logging out...');
-  };
+  const initials = useMemo(() => {
+    const fn = profile?.firstName?.[0] ?? '';
+    const ln = profile?.lastName?.[0] ?? '';
+    return `${fn}${ln}`.toUpperCase() || 'U';
+  }, [profile]);
+
+  const roleLabel = profile?.accountType
+    ? (typeLabel[profile.accountType] ?? profile.accountType)
+    : undefined;
 
   return (
-    <div className={`flex items-center justify-end space-x-4 ${className}`}>
-      {/* Notifications */}
-      <Button variant="ghost" size="icon" className="relative">
-        <Bell className="h-5 w-5" />
-        {notifications > 0 && (
-          <span className="absolute -top-1 -right-1 h-5 w-5 bg-destructive text-destructive-foreground text-xs rounded-full flex items-center justify-center">
-            {notifications}
-          </span>
-        )}
-      </Button>
-
-      {/* User Menu */}
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="h-10 w-auto px-2 py-1">
-            <div className="flex items-center space-x-3">
-              <div className="text-right hidden sm:block">
-                <div className="text-sm font-medium">{currentUser.name}</div>
-                <div className="text-xs text-muted-foreground">{currentUser.email}</div>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="px-2">
+          <div className="flex items-center gap-2">
+            <Avatar className="h-8 w-8">
+              <AvatarImage src="/placeholder.svg" alt="avatar" />
+              <AvatarFallback>{initials}</AvatarFallback>
+            </Avatar>
+            <div className="hidden sm:block text-left">
+              <div className="flex items-center gap-2">
+                <div className="text-sm font-medium leading-none">
+                  {profile ? `${profile.firstName} ${profile.lastName}` : 'Użytkownik'}
+                </div>
+                {roleLabel && (
+                  <Badge variant="secondary" className="text-[10px] py-0 px-2">
+                    {roleLabel}
+                  </Badge>
+                )}
               </div>
-              <Avatar className="h-8 w-8">
-                <AvatarImage src={currentUser.avatar} alt={currentUser.name} />
-                <AvatarFallback>
-                  {currentUser.name
-                    .split(' ')
-                    .map((n) => n[0])
-                    .join('')}
-                </AvatarFallback>
-              </Avatar>
+              <div className="text-xs text-muted-foreground">{profile?.email ?? '—'}</div>
             </div>
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-56" align="end">
-          <DropdownMenuLabel>
-            <div className="flex flex-col space-y-1">
-              <p className="text-sm font-medium leading-none">{currentUser.name}</p>
-              <p className="text-xs leading-none text-muted-foreground">{currentUser.email}</p>
-              <p className="text-xs leading-none text-primary">{currentUser.role}</p>
-            </div>
-          </DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <User className="mr-2 h-4 w-4" />
-            <span>Profil</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Settings className="mr-2 h-4 w-4" />
-            <span>Ustawienia</span>
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            onClick={handleLogout}
-            className="text-destructive focus:text-destructive"
-          >
-            <LogOut className="mr-2 h-4 w-4" />
-            <span>Wyloguj</span>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
+          </div>
+        </Button>
+      </DropdownMenuTrigger>
+
+      <DropdownMenuContent align="end" className="w-64">
+        <DropdownMenuLabel className="space-y-1">
+          <div className="font-medium">
+            {profile ? `${profile.firstName} ${profile.lastName}` : 'Użytkownik'}
+          </div>
+          {profile?.email && <div className="text-xs text-muted-foreground">{profile.email}</div>}
+          {roleLabel && (
+            <Badge variant="outline" className="text-[10px]">
+              {roleLabel}
+            </Badge>
+          )}
+        </DropdownMenuLabel>
+
+        <DropdownMenuSeparator />
+
+        {/* Link do profilu (placeholder) */}
+        <DropdownMenuItem
+          onSelect={(e) => {
+            e.preventDefault();
+            navigate('/profile');
+          }}
+          className="cursor-pointer"
+        >
+          <User className="mr-2 h-4 w-4" />
+          Profil
+        </DropdownMenuItem>
+
+        {/* Link do ustawień konta (placeholder) */}
+        <DropdownMenuItem
+          onSelect={(e) => {
+            e.preventDefault();
+            navigate('/settings');
+          }}
+          className="cursor-pointer"
+        >
+          <Settings className="mr-2 h-4 w-4" />
+          Ustawienia konta
+        </DropdownMenuItem>
+
+        <DropdownMenuSeparator />
+
+        <DropdownMenuItem
+          className="text-red-600 focus:text-red-600 cursor-pointer"
+          onSelect={(e) => {
+            e.preventDefault();
+            logoutMutation.mutate();
+          }}
+        >
+          <LogOut className="mr-2 h-4 w-4" />
+          Wyloguj
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

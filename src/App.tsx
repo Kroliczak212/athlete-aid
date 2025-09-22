@@ -6,6 +6,7 @@ import { ErrorBoundary } from './components/ErrorBoundary';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { DashboardLayout } from './components/DashboardLayout';
 import { Suspense, lazy } from 'react';
+import RequireAuth from './auth/RequireAuth';
 
 const CRMDashboard = lazy(() => import('./pages/CRMDashboard'));
 const ClubDashboard = lazy(() => import('./pages/ClubDashboard'));
@@ -24,6 +25,7 @@ const MotionAnalysis = lazy(() => import('./pages/MotionAnalysis'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
+// (opcjonalnie) const ChangePassword = lazy(() => import('./pages/ChangePassword'));
 
 const queryClient = new QueryClient();
 
@@ -35,33 +37,37 @@ function App() {
           <BrowserRouter>
             <Suspense fallback={<div className="p-6">Ładowanie…</div>}>
               <Routes>
-                {/* Public routes */}
+                {/* Public */}
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
 
-                {/* Protected app layout */}
-                <Route element={<DashboardLayout />}>
-                  <Route index element={<CRMDashboard />} />
-                  <Route path="/club" element={<ClubDashboard />} />
-                  <Route path="/athlete/:id" element={<AthleteProfile />} />
-                  <Route path="/athlete-dashboard" element={<AthleteDashboard />} />
+                {/* Private (guard + layout) */}
+                <Route element={<RequireAuth />}>
+                  <Route element={<DashboardLayout />}>
+                    <Route index element={<CRMDashboard />} />
+                    <Route path="/club" element={<ClubDashboard />} />
+                    <Route path="/athlete/:id" element={<AthleteProfile />} />
+                    <Route path="/athlete-dashboard" element={<AthleteDashboard />} />
 
-                  {/* Training */}
-                  <Route path="/training" element={<TrainingPlans />} />
-                  <Route path="/training/plan/:id" element={<TrainingPlanDetails />} />
-                  <Route path="/training/template/:id" element={<TemplateDetails />} />
-                  <Route path="/training/:id" element={<TrainingDetails />} />
+                    {/* Training */}
+                    <Route path="/training" element={<TrainingPlans />} />
+                    <Route path="/training/plan/:id" element={<TrainingPlanDetails />} />
+                    <Route path="/training/template/:id" element={<TemplateDetails />} />
+                    <Route path="/training/:id" element={<TrainingDetails />} />
 
-                  {/* Analyzer */}
-                  <Route path="/analyzer" element={<AIAnalyzer />} />
-                  <Route path="/analyzer/athlete/:id" element={<AthleteDetailAnalysis />} />
-                  <Route path="/analyzer/compare" element={<AthleteComparison />} />
-                  <Route path="/analyzer/weekly-report" element={<WeeklyReport />} />
-                  <Route path="/analyzer/training-zones" element={<TrainingZones />} />
-                  <Route path="/motion" element={<MotionAnalysis />} />
+                    {/* Analyzer */}
+                    <Route path="/analyzer" element={<AIAnalyzer />} />
+                    <Route path="/analyzer/athlete/:id" element={<AthleteDetailAnalysis />} />
+                    <Route path="/analyzer/compare" element={<AthleteComparison />} />
+                    <Route path="/analyzer/weekly-report" element={<WeeklyReport />} />
+                    <Route path="/analyzer/training-zones" element={<TrainingZones />} />
+                    <Route path="/motion" element={<MotionAnalysis />} />
 
-                  {/* 404 inside layout */}
-                  <Route path="*" element={<NotFound />} />
+                    {/* (opcjonalnie) <Route path="/change-password" element={<ChangePassword />} /> */}
+
+                    {/* 404 w layoucie */}
+                    <Route path="*" element={<NotFound />} />
+                  </Route>
                 </Route>
               </Routes>
             </Suspense>

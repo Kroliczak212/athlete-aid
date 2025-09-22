@@ -1,86 +1,105 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
-import { setAuthTokenGetter, setOnUnauthorized } from '../api/client/interceptors';
-import { loadSession, saveSession, clearSession, getAccessToken } from './session';
-import { useProfile } from '../api/queries/auth/useProfile';
-import { queryClient } from '../api/queries/queryClient';
-import { AuthAPI } from '../api/endpoints/auth.api';
+import React, { createContext, useCallback, useEffect, useMemo, useState } from 'react';
+import type { Me } from '@/api/schemas/auth';
 
-import type { User } from '../api/schemas/auth.schema';
-
-type Tokens = { accessToken: string; refreshToken?: string | null };
-
-type AuthContextType = {
-  user: User | null;
-  isAuthenticated: boolean;
-  isLoadingUser: boolean;
-  tokens: Tokens | null;
-  setTokens: (t: Tokens) => void;
-  logout: () => Promise<void>;
+type AuthState = {
+  accessToken: string | null;
+  tokenType: string;
+  user: Me | null;
 };
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+type AuthContextValue = {
+  accessToken: string | null;
+  tokenType: string;
+  isAuthenticated: boolean;
+  user: Me | null;
+  setTokens: (p: { accessToken: string; tokenType?: string; persist?: boolean }) => void;
+  setUser: (u: Me | null) => void;
+  logout: () => void;
+};
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const initial = loadSession();
-  const [tokens, setTokensState] = useState<Tokens | null>(
-    initial.accessToken
-      ? {
-          accessToken: initial.accessToken,
-          refreshToken: initial.refreshToken ?? null,
-        }
-      : null,
-  );
+export const AuthContext = createContext<AuthContextValue>({
+  accessToken: null,
+  tokenType: 'Bearer',
+  isAuthenticated: false,
+  user: null,
+  setTokens: () => {},
+  setUser: () => {},
+  logout: () => {},
+});
 
-  // rejestrujemy interceptory klienta HTTP
-  useEffect(() => {
-    setAuthTokenGetter(() => getAccessToken());
-    setOnUnauthorized(async () => {
-      await logout(); // 401 -> czyścimy sesję
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // dane użytkownika – tylko gdy mamy token
-  const { data: user, isLoading: isLoadingUser } = useProfile({
-    enabled: !!tokens?.accessToken,
+export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
+  const [auth, setAuth] = useState<AuthState>({
+    accessToken: null,
+    tokenType: 'Bearer',
+    user: null,
   });
 
-  const setTokens = (t: Tokens) => {
-    setTokensState(t);
-    saveSession({
-      accessToken: t.accessToken,
-      refreshToken: t.refreshToken ?? null,
-    });
-  };
+  // 1) Hydratacja po starcie (żeby nowe karty też miały stan)
+  useEffect(() => {
+    const tok = localStorage.getItem('access_token');
+    const typ = localStorage.getItem('token_type') || 'Bearer';
+    if (tok) setAuth((s) => ({ ...s, accessToken: tok, tokenType: typ }));
+  }, []);
 
-  const logout = async () => {
-    try {
-      await AuthAPI.logout();
-    } catch {
-      /* ignore */
-    }
-    clearSession();
-    setTokensState(null);
-    queryClient.clear();
-  };
+  // 2) Sync między kartami – reaguj na zmiany localStorage
+  useEffect(() => {
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === 'access_token') {
+        const tok = localStorage.getItem('access_token');
+        const typ = localStorage.getItem('token_type') || 'Bearer';
+        // po zmianie tokenu czyścimy usera (odświeży się z /auth/me)
+        setAuth((s) => ({ ...s, accessToken: tok, tokenType: typ, user: null }));
+      }
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, []);
 
-  const value = useMemo<AuthContextType>(
+  const setTokens = useCallback(
+    ({
+      accessToken,
+      tokenType = 'Bearer',
+      persist = true,
+    }: {
+      accessToken: string;
+      tokenType?: string;
+      persist?: boolean;
+    }) => {
+      setAuth((s) => ({ ...s, accessToken, tokenType, user: null }));
+      if (persist) {
+        localStorage.setItem('access_token', accessToken);
+        localStorage.setItem('token_type', tokenType);
+      } else {
+        // czyszczenie ewentualnych starych wartości
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('token_type');
+      }
+    },
+    [],
+  );
+
+  const setUser = useCallback((u: Me | null) => setAuth((s) => ({ ...s, user: u })), []);
+
+  const logout = useCallback(() => {
+    setAuth({ accessToken: null, tokenType: 'Bearer', user: null });
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('token_type');
+    localStorage.removeItem('refresh_token');
+    localStorage.removeItem('user_email');
+  }, []);
+
+  const value = useMemo<AuthContextValue>(
     () => ({
-      user: user ?? null,
-      isAuthenticated: !!tokens?.accessToken,
-      isLoadingUser,
-      tokens,
+      accessToken: auth.accessToken,
+      tokenType: auth.tokenType,
+      isAuthenticated: Boolean(auth.accessToken),
+      user: auth.user,
       setTokens,
+      setUser,
       logout,
     }),
-    [user, isLoadingUser, tokens],
+    [auth, setTokens, setUser, logout],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-}
-
-export function useAuthContext() {
-  const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error('useAuthContext must be used within <AuthProvider>');
-  return ctx;
-}
+};

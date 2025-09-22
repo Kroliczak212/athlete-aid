@@ -1,179 +1,169 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import { useRegister } from '@/api/queries/auth/useRegister';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardFooter,
+  CardTitle,
+  CardDescription,
+} from '@/components/ui/card';
 import {
   Select,
-  SelectContent,
-  SelectItem,
   SelectTrigger,
+  SelectContent,
   SelectValue,
+  SelectItem,
 } from '@/components/ui/select';
-import { Mail, Lock, User, Users, Building } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
+import { useToast } from '@/hooks/use-toast';
+import { Loader2, UserPlus } from 'lucide-react';
 
 export default function Register() {
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
+  const [form, setForm] = useState({
     email: '',
     password: '',
-    confirmPassword: '',
-    role: '',
-    clubName: '',
+    firstName: '',
+    lastName: '',
+    accountType: 'athlete',
   });
+  const reg = useRegister();
+  const nav = useNavigate();
+  const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle registration logic here
-    console.log('Register:', formData);
-  };
-
-  const handleInputChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+    try {
+      await reg.mutateAsync(form);
+      toast({ title: 'Konto utworzone', description: form.email });
+      nav('/');
+    } catch (err: any) {
+      toast({
+        title: 'Błąd rejestracji',
+        description: err?.message ?? 'Spróbuj ponownie',
+        variant: 'destructive',
+      });
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-subtle flex items-center justify-center p-4">
-      <Card className="w-full max-w-lg border-border bg-card shadow-card">
-        <CardHeader className="space-y-1">
-          <div className="flex items-center justify-center mb-4">
-            <Users className="h-8 w-8 text-primary" />
+    <div className="min-h-screen grid lg:grid-cols-2">
+      {/* Left / hero */}
+      <div className="hidden lg:flex items-center justify-center bg-gradient-to-br from-primary/10 via-background to-sport-accent/10 p-12">
+        <div className="max-w-md space-y-4">
+          <h1 className="text-3xl font-semibold tracking-tight">Dołącz do Athlete Aid</h1>
+          <p className="text-muted-foreground">
+            Stwórz konto i zacznij prowadzić zawodników: plany, komunikacja i analityka w jednym
+            miejscu.
+          </p>
+          <Separator />
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <UserPlus className="h-4 w-4" />
+            Rejestracja trwa mniej niż minutę
           </div>
-          <CardTitle className="text-2xl text-center">Rejestracja</CardTitle>
-          <CardDescription className="text-center">
-            Stwórz konto w systemie zarządzania sportowcami
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="firstName">Imię</Label>
-                <div className="relative">
-                  <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+        </div>
+      </div>
+
+      {/* Right / form */}
+      <div className="flex items-center justify-center p-6">
+        <Card className="w-full max-w-md shadow-lg">
+          <CardHeader className="space-y-1">
+            <CardTitle className="text-2xl">Rejestracja</CardTitle>
+            <CardDescription>Uzupełnij dane i wybierz typ konta.</CardDescription>
+          </CardHeader>
+
+          <CardContent>
+            <form onSubmit={onSubmit} className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div className="space-y-2">
+                  <Label htmlFor="firstName">Imię</Label>
                   <Input
                     id="firstName"
-                    type="text"
-                    placeholder="imię"
-                    value={formData.firstName}
-                    onChange={(e) => handleInputChange('firstName', e.target.value)}
-                    className="pl-10"
+                    value={form.firstName}
+                    onChange={(e) => setForm({ ...form, firstName: e.target.value })}
+                    placeholder="Anna"
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="lastName">Nazwisko</Label>
+                  <Input
+                    id="lastName"
+                    value={form.lastName}
+                    onChange={(e) => setForm({ ...form, lastName: e.target.value })}
+                    placeholder="Kowalska"
                     required
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="lastName">Nazwisko</Label>
-                <Input
-                  id="lastName"
-                  type="text"
-                  placeholder="nazwisko"
-                  value={formData.lastName}
-                  onChange={(e) => handleInputChange('lastName', e.target.value)}
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <Label htmlFor="email">E-mail</Label>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="wprowadź email"
-                  value={formData.email}
-                  onChange={(e) => handleInputChange('email', e.target.value)}
-                  className="pl-10"
+                  value={form.email}
+                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                  placeholder="anna.kowalska@klub.pl"
                   required
                 />
               </div>
-            </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="role">Rola</Label>
-              <Select onValueChange={(value) => handleInputChange('role', value)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="wybierz rolę" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="trainer">Trener</SelectItem>
-                  <SelectItem value="club_manager">Menedżer klubu</SelectItem>
-                  <SelectItem value="athlete">Sportowiec</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {(formData.role === 'trainer' || formData.role === 'club_manager') && (
               <div className="space-y-2">
-                <Label htmlFor="clubName">Nazwa klubu</Label>
-                <div className="relative">
-                  <Building className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="clubName"
-                    type="text"
-                    placeholder="nazwa klubu"
-                    value={formData.clubName}
-                    onChange={(e) => handleInputChange('clubName', e.target.value)}
-                    className="pl-10"
-                    required
-                  />
-                </div>
-              </div>
-            )}
-
-            <div className="space-y-2">
-              <Label htmlFor="password">Hasło</Label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <Label htmlFor="password">Hasło</Label>
                 <Input
                   id="password"
                   type="password"
-                  placeholder="wprowadź hasło"
-                  value={formData.password}
-                  onChange={(e) => handleInputChange('password', e.target.value)}
-                  className="pl-10"
+                  value={form.password}
+                  onChange={(e) => setForm({ ...form, password: e.target.value })}
+                  placeholder="min. 8 znaków"
                   required
                 />
               </div>
-            </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="confirmPassword">Potwierdź hasło</Label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                <Input
-                  id="confirmPassword"
-                  type="password"
-                  placeholder="potwierdź hasło"
-                  value={formData.confirmPassword}
-                  onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
-                  className="pl-10"
-                  required
-                />
+              <div className="space-y-2">
+                <Label>Typ konta</Label>
+                <Select
+                  value={form.accountType}
+                  onValueChange={(v) => setForm({ ...form, accountType: v })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Wybierz..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="athlete">Zawodnik</SelectItem>
+                    <SelectItem value="coach">Trener</SelectItem>
+                    <SelectItem value="club">Klub</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
-            </div>
 
-            <Button
-              type="submit"
-              className="w-full bg-primary hover:bg-sport-hover text-primary-foreground shadow-sport"
-            >
-              Zarejestruj się
-            </Button>
-          </form>
+              <Button type="submit" className="w-full" disabled={reg.isPending}>
+                {reg.isPending ? (
+                  <span className="inline-flex items-center gap-2">
+                    <Loader2 className="h-4 w-4 animate-spin" /> Rejestrowanie…
+                  </span>
+                ) : (
+                  'Utwórz konto'
+                )}
+              </Button>
+            </form>
+          </CardContent>
 
-          <div className="mt-6 text-center text-sm">
-            <span className="text-muted-foreground">Masz już konto? </span>
-            <Link to="/login" className="text-primary hover:underline font-medium">
-              Zaloguj się
-            </Link>
-          </div>
-        </CardContent>
-      </Card>
+          <CardFooter className="flex flex-col gap-3">
+            <p className="text-sm text-muted-foreground">
+              Masz już konto?{' '}
+              <Link className="underline underline-offset-2" to="/login">
+                Zaloguj się
+              </Link>
+            </p>
+          </CardFooter>
+        </Card>
+      </div>
     </div>
   );
 }

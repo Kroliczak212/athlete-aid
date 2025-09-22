@@ -12,7 +12,7 @@ export type HttpOptions = {
   body?: unknown;
   signal?: AbortSignal;
   timeoutMs?: number;
-  retries?: number; // tylko dla GET/HEAD
+  retries?: number;
   authToken?: string | null;
 };
 
@@ -88,7 +88,6 @@ export async function request<T>(
   let attempt = 0;
   const base = 300;
 
-  // eslint-disable-next-line no-constant-condition
   while (true) {
     try {
       const res = await fetchWithTimeout(url, init, timeoutMs);
@@ -114,8 +113,8 @@ export async function request<T>(
         return parsed.data;
       }
       return data;
-    } catch (e: any) {
-      if (e?.name === 'AbortError') {
+    } catch (e: unknown) {
+      if (typeof e === 'object' && e !== null && 'name' in e && (e as any).name === 'AbortError') {
         throw new ApiError('Request was aborted or timed out', {
           isAbort: true,
           isTimeout: true,
@@ -128,10 +127,18 @@ export async function request<T>(
         await delay(base * 2 ** (attempt - 1));
         continue;
       }
-      throw new ApiError(e?.message ?? 'Network error', {
-        isNetwork: true,
-        retriable: false,
-      });
+      throw new ApiError(
+        typeof e === 'object' &&
+        e !== null &&
+        'message' in e &&
+        typeof (e as any).message === 'string'
+          ? (e as any).message
+          : 'Network error',
+        {
+          isNetwork: true,
+          retriable: false,
+        },
+      );
     }
   }
 }

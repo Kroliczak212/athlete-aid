@@ -21,8 +21,25 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import { UserPlus2 } from 'lucide-react';
 
+// ---> typy ZAWSZE po importach <---
+type Trainer = {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  specialty?: string;
+  experience?: string;
+  qualifications?: string;
+  hourlyRate?: string; // zostawiam string, bo z <input type="number" /> i tak dostajesz string
+  notes?: string;
+  athletes: unknown[];
+  weeklyHours: number;
+  rating: number;
+  avatar: string;
+};
+
 interface AddTrainerDialogProps {
-  onAddTrainer?: (trainer: any) => void;
+  onAddTrainer?: (trainer: Trainer) => void;
 }
 
 export function AddTrainerDialog({ onAddTrainer }: AddTrainerDialogProps) {
@@ -41,7 +58,7 @@ export function AddTrainerDialog({ onAddTrainer }: AddTrainerDialogProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const newTrainer = {
+    const newTrainer: Trainer = {
       id: Date.now(),
       ...formData,
       athletes: [],

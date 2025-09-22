@@ -2,8 +2,10 @@ import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { AppSidebar } from './AppSidebar';
 import { UserHeader } from './UserHeader';
 import { Outlet } from 'react-router-dom';
+import { useMe } from '@/api/queries/auth/useMe';
 
 export function DashboardLayout() {
+  useMe();
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-gradient-subtle">

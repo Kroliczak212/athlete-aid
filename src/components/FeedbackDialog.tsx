@@ -18,8 +18,15 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
+import type { BadgeProps } from '@/components/ui/badge';
 import { MessageSquare, AlertCircle, CheckCircle, Info } from 'lucide-react';
 
+type BadgeVariant = NonNullable<BadgeProps['variant']>;
+const getPriorityVariant = (p: string): BadgeVariant => {
+  if (p === 'high') return 'destructive';
+  if (p === 'medium') return 'secondary';
+  return 'default';
+};
 interface FeedbackDialogProps {
   children: React.ReactNode;
   athleteName?: string;
@@ -156,7 +163,7 @@ export function FeedbackDialog({ children, athleteName }: FeedbackDialogProps) {
               <div className="flex items-center gap-2 mb-2">
                 {getFeedbackIcon(feedbackType)}
                 <span className="font-medium text-sm">Podgląd uwagi</span>
-                <Badge variant={getPriorityColor(priority) as any} className="text-xs">
+                <Badge variant={getPriorityVariant(priority)} className="text-xs">
                   {priority === 'high' ? 'Wysoki' : priority === 'low' ? 'Niski' : 'Normalny'}
                 </Badge>
               </div>

@@ -12,8 +12,10 @@ export type HttpOptions = {
   body?: unknown;
   signal?: AbortSignal;
   timeoutMs?: number;
-  retries?: number;
+  retries?: number; // tylko dla GET/HEAD
   authToken?: string | null;
+  /** Wysyłaj cookies/poświadczenia? Domyślnie NIE (żeby uniknąć CORS-u). */
+  withCredentials?: boolean;
 };
 
 const toQuery = (q?: HttpOptions['query']) =>
@@ -63,6 +65,7 @@ export async function request<T>(
     timeoutMs = API_TIMEOUT_MS,
     retries = 2,
     authToken,
+    withCredentials = false,
   } = opts;
 
   const url = `${API_URL}${path}${toQuery(query)}`;
@@ -80,7 +83,7 @@ export async function request<T>(
     method,
     headers: finalHeaders,
     body: body !== undefined ? JSON.stringify(body) : undefined,
-    credentials: 'include',
+    credentials: withCredentials ? 'include' : 'omit',
     signal,
   };
 
@@ -88,6 +91,7 @@ export async function request<T>(
   let attempt = 0;
   const base = 300;
 
+  // Retry/backoff dla GET/HEAD
   while (true) {
     try {
       const res = await fetchWithTimeout(url, init, timeoutMs);
@@ -114,6 +118,7 @@ export async function request<T>(
       }
       return data;
     } catch (e: unknown) {
+      // Abort/timeout
       if (typeof e === 'object' && e !== null && 'name' in e && (e as any).name === 'AbortError') {
         throw new ApiError('Request was aborted or timed out', {
           isAbort: true,
@@ -134,10 +139,7 @@ export async function request<T>(
         typeof (e as any).message === 'string'
           ? (e as any).message
           : 'Network error',
-        {
-          isNetwork: true,
-          retriable: false,
-        },
+        { isNetwork: true, retriable: false },
       );
     }
   }

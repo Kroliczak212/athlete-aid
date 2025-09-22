@@ -25,7 +25,7 @@ const MotionAnalysis = lazy(() => import('./pages/MotionAnalysis'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
-// (opcjonalnie) const ChangePassword = lazy(() => import('./pages/ChangePassword'));
+// opcjonalnie: const ChangePassword = lazy(() => import('./pages/ChangePassword'));
 
 const queryClient = new QueryClient();
 

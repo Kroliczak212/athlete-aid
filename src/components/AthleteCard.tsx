@@ -1,19 +1,28 @@
-import { Link } from "react-router-dom";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { EditAthleteDialog } from "@/components/EditAthleteDialog";
-import { TrainingConfigDialog } from "@/components/TrainingConfigDialog";
-import { TrainerFeedbackDialog } from "@/components/TrainerFeedbackDialog";
-import { Calendar, DollarSign, CheckCircle, XCircle, Edit, Settings, MessageSquare, MoreHorizontal } from "lucide-react";
+import { Link } from 'react-router-dom';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { EditAthleteDialog } from '@/components/EditAthleteDialog';
+import { TrainingConfigDialog } from '@/components/TrainingConfigDialog';
+import { TrainerFeedbackDialog } from '@/components/TrainerFeedbackDialog';
+import {
+  Calendar,
+  DollarSign,
+  CheckCircle,
+  XCircle,
+  Edit,
+  Settings,
+  MessageSquare,
+  MoreHorizontal,
+} from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu';
 
 interface AthleteCardProps {
   athlete: {
@@ -45,7 +54,7 @@ export function AthleteCard({ athlete }: AthleteCardProps) {
               </Badge>
             </div>
           </div>
-          
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
@@ -81,29 +90,29 @@ export function AthleteCard({ athlete }: AthleteCardProps) {
           <Calendar className="h-4 w-4" />
           <span>Następne: {athlete.nextSession}</span>
         </div>
-        
+
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <DollarSign className="h-4 w-4" />
-            <span className={`text-sm font-medium ${
-              athlete.paid ? "text-green-600" : "text-destructive"
-            }`}>
-              {athlete.paid ? "Opłacone" : "Nieopłacone"}
+            <span
+              className={`text-sm font-medium ${
+                athlete.paid ? 'text-green-600' : 'text-destructive'
+              }`}
+            >
+              {athlete.paid ? 'Opłacone' : 'Nieopłacone'}
             </span>
           </div>
-          
+
           <div className="flex items-center gap-1">
             {athlete.lastAttendance ? (
               <CheckCircle className="h-4 w-4 text-green-600" />
             ) : (
               <XCircle className="h-4 w-4 text-destructive" />
             )}
-            <span className="text-xs text-muted-foreground">
-              Ostatnia obecność
-            </span>
+            <span className="text-xs text-muted-foreground">Ostatnia obecność</span>
           </div>
         </div>
-        
+
         <Link to={`/athlete/${athlete.id}`}>
           <Button variant="outline" className="w-full mt-3 border-border hover:bg-sport-accent">
             Zobacz szczegóły

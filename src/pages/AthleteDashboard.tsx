@@ -1,14 +1,14 @@
-import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { MessageToTrainerDialog } from "@/components/MessageToTrainerDialog";
-import { 
-  Calendar, 
-  Clock, 
-  Target, 
+import { useState } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { MessageToTrainerDialog } from '@/components/MessageToTrainerDialog';
+import {
+  Calendar,
+  Clock,
+  Target,
   Activity,
   CheckCircle,
   Circle,
@@ -21,68 +21,72 @@ import {
   Upload,
   BarChart3,
   Settings,
-  Bell
-} from "lucide-react";
+  Bell,
+} from 'lucide-react';
 
 const mockAthleteData = {
-  name: "Anna Kowalska",
-  sport: "Pływanie",
-  level: "Zaawansowany",
-  nextSession: "15.09.2024 18:00",
+  name: 'Anna Kowalska',
+  sport: 'Pływanie',
+  level: 'Zaawansowany',
+  nextSession: '15.09.2024 18:00',
   weekProgress: 3,
   weekTotal: 4,
   currentPlan: {
-    name: "Plan Przygotowawczy - Wrześień",
+    name: 'Plan Przygotowawczy - Wrześień',
     progress: 65,
     sessionsCompleted: 8,
-    totalSessions: 12
+    totalSessions: 12,
   },
   todaySession: {
-    type: "Technika",
-    time: "18:00",
+    type: 'Technika',
+    time: '18:00',
     duration: 90,
     exercises: [
       {
-        name: "Rozgrzewka",
-        description: "Powolne rozpływanie z koncentracją na technice oddychania. Stopniowe zwiększanie tempa, aby przygotować mięśnie do głównej części treningu.",
-        details: "400m wolny styl w tempie 70% maksymalnego",
-        duration: 15
+        name: 'Rozgrzewka',
+        description:
+          'Powolne rozpływanie z koncentracją na technice oddychania. Stopniowe zwiększanie tempa, aby przygotować mięśnie do głównej części treningu.',
+        details: '400m wolny styl w tempie 70% maksymalnego',
+        duration: 15,
       },
       {
-        name: "Technika kraul",
-        description: "Praca nad poprawą techniki wioślowania. Koncentracja na wysokim łokciu i efektywnym wyciągnięciu ręki.",
-        details: "8x50m z 30s odpoczynku między powtórzeniami",
-        duration: 25
+        name: 'Technika kraul',
+        description:
+          'Praca nad poprawą techniki wioślowania. Koncentracja na wysokim łokciu i efektywnym wyciągnięciu ręki.',
+        details: '8x50m z 30s odpoczynku między powtórzeniami',
+        duration: 25,
       },
       {
-        name: "Interwały",
-        description: "Wysokointensywna praca w strefie progowej. Utrzymanie stałego tempa i kontrola tętna.",
-        details: "4x100m z 90s odpoczynku, tempo 85% maksymalnego",
-        duration: 35
+        name: 'Interwały',
+        description:
+          'Wysokointensywna praca w strefie progowej. Utrzymanie stałego tempa i kontrola tętna.',
+        details: '4x100m z 90s odpoczynku, tempo 85% maksymalnego',
+        duration: 35,
       },
       {
-        name: "Wyciszenie",
-        description: "Powolne pływanie relaksacyjne. Koncentracja na głębokim oddychaniu i rozluźnieniu mięśni.",
-        details: "200m wolny styl w tempie regeneracyjnym",
-        duration: 15
-      }
-    ]
+        name: 'Wyciszenie',
+        description:
+          'Powolne pływanie relaksacyjne. Koncentracja na głębokim oddychaniu i rozluźnieniu mięśni.',
+        details: '200m wolny styl w tempie regeneracyjnym',
+        duration: 15,
+      },
+    ],
   },
   recentResults: [
-    { date: "12.09", exercise: "100m kraul", result: "1:02.45", improvement: "+2.1s" },
-    { date: "10.09", exercise: "200m mieszanka", result: "2:28.12", improvement: "+1.8s" },
-    { date: "08.09", exercise: "50m motyl", result: "28.67", improvement: "+0.5s" }
+    { date: '12.09', exercise: '100m kraul', result: '1:02.45', improvement: '+2.1s' },
+    { date: '10.09', exercise: '200m mieszanka', result: '2:28.12', improvement: '+1.8s' },
+    { date: '08.09', exercise: '50m motyl', result: '28.67', improvement: '+0.5s' },
   ],
   weeklyStats: {
     totalTime: 360,
     avgHeartRate: 145,
     caloriesBurned: 1240,
-    sessionsCompleted: 3
-  }
+    sessionsCompleted: 3,
+  },
 };
 
 export default function AthleteDashboard() {
-  const [selectedTab, setSelectedTab] = useState("overview");
+  const [selectedTab, setSelectedTab] = useState('overview');
 
   return (
     <div className="p-4 lg:p-6 space-y-6">
@@ -120,7 +124,9 @@ export default function AthleteDashboard() {
               <Target className="h-5 w-5 text-primary" />
               <div>
                 <p className="text-xs text-muted-foreground">Ten tydzień</p>
-                <p className="text-lg font-bold">{mockAthleteData.weekProgress}/{mockAthleteData.weekTotal}</p>
+                <p className="text-lg font-bold">
+                  {mockAthleteData.weekProgress}/{mockAthleteData.weekTotal}
+                </p>
               </div>
             </div>
           </CardContent>
@@ -165,16 +171,28 @@ export default function AthleteDashboard() {
 
       <Tabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-4">
         <TabsList className="grid w-full grid-cols-4 bg-sport-accent">
-          <TabsTrigger value="overview" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+          <TabsTrigger
+            value="overview"
+            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+          >
             Przegląd
           </TabsTrigger>
-          <TabsTrigger value="training" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+          <TabsTrigger
+            value="training"
+            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+          >
             Trening
           </TabsTrigger>
-          <TabsTrigger value="results" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+          <TabsTrigger
+            value="results"
+            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+          >
             Wyniki
           </TabsTrigger>
-          <TabsTrigger value="dashboard" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+          <TabsTrigger
+            value="dashboard"
+            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+          >
             Dashboard
           </TabsTrigger>
         </TabsList>
@@ -195,7 +213,8 @@ export default function AthleteDashboard() {
                   <div className="flex justify-between text-sm">
                     <span>Postęp</span>
                     <span className="font-medium">
-                      {mockAthleteData.currentPlan.sessionsCompleted}/{mockAthleteData.currentPlan.totalSessions}
+                      {mockAthleteData.currentPlan.sessionsCompleted}/
+                      {mockAthleteData.currentPlan.totalSessions}
                     </span>
                   </div>
                   <Progress value={mockAthleteData.currentPlan.progress} className="h-2" />
@@ -261,11 +280,15 @@ export default function AthleteDashboard() {
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex-1">
                         <div className="font-medium text-sm mb-1">{exercise.name}</div>
-                        <div className="text-sm text-muted-foreground mb-2">{exercise.description}</div>
+                        <div className="text-sm text-muted-foreground mb-2">
+                          {exercise.description}
+                        </div>
                         <div className="text-xs font-medium text-primary">{exercise.details}</div>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Badge variant="outline" className="text-xs">{exercise.duration} min</Badge>
+                        <Badge variant="outline" className="text-xs">
+                          {exercise.duration} min
+                        </Badge>
                         <Button size="sm" variant="outline" className="text-xs">
                           Ukończono
                         </Button>
@@ -289,7 +312,10 @@ export default function AthleteDashboard() {
             <CardContent>
               <div className="space-y-3">
                 {mockAthleteData.recentResults.map((result, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 bg-sport-accent rounded-lg">
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-3 bg-sport-accent rounded-lg"
+                  >
                     <div className="flex-1">
                       <p className="font-medium">{result.exercise}</p>
                       <p className="text-sm text-muted-foreground">{result.date}</p>
@@ -325,11 +351,17 @@ export default function AthleteDashboard() {
                     Wyślij wiadomość do trenera
                   </Button>
                 </MessageToTrainerDialog>
-                <Button variant="outline" className="w-full justify-start border-border hover:bg-sport-accent">
+                <Button
+                  variant="outline"
+                  className="w-full justify-start border-border hover:bg-sport-accent"
+                >
                   <Upload className="mr-2 h-4 w-4" />
                   Prześlij dane z urządzenia
                 </Button>
-                <Button variant="outline" className="w-full justify-start border-border hover:bg-sport-accent">
+                <Button
+                  variant="outline"
+                  className="w-full justify-start border-border hover:bg-sport-accent"
+                >
                   <BarChart3 className="mr-2 h-4 w-4" />
                   Zobacz szczegółowe statystyki
                 </Button>
@@ -381,31 +413,65 @@ export default function AthleteDashboard() {
             <CardContent>
               <div className="space-y-3">
                 {[
-                  { date: "16.09", type: "Technika", duration: "90 min", completed: true, rating: 4, id: 1 },
-                  { date: "14.09", type: "Wytrzymałość", duration: "120 min", completed: true, rating: 5, id: 2 },
-                  { date: "12.09", type: "Interwały", duration: "60 min", completed: true, rating: 3, id: 3 },
-                  { date: "10.09", type: "Siła", duration: "75 min", completed: false, rating: 0, id: 4 },
+                  {
+                    date: '16.09',
+                    type: 'Technika',
+                    duration: '90 min',
+                    completed: true,
+                    rating: 4,
+                    id: 1,
+                  },
+                  {
+                    date: '14.09',
+                    type: 'Wytrzymałość',
+                    duration: '120 min',
+                    completed: true,
+                    rating: 5,
+                    id: 2,
+                  },
+                  {
+                    date: '12.09',
+                    type: 'Interwały',
+                    duration: '60 min',
+                    completed: true,
+                    rating: 3,
+                    id: 3,
+                  },
+                  {
+                    date: '10.09',
+                    type: 'Siła',
+                    duration: '75 min',
+                    completed: false,
+                    rating: 0,
+                    id: 4,
+                  },
                 ].map((training, index) => (
-                  <div 
-                    key={index} 
+                  <div
+                    key={index}
                     className="flex items-center justify-between p-3 bg-sport-accent rounded-lg cursor-pointer hover:bg-accent/80 transition-colors"
-                    onClick={() => training.completed && (window.location.href = `/training/${training.id}`)}
+                    onClick={() =>
+                      training.completed && (window.location.href = `/training/${training.id}`)
+                    }
                   >
                     <div className="flex items-center gap-3">
-                      <div className={`w-3 h-3 rounded-full ${
-                        training.completed ? 'bg-green-500' : 'bg-gray-400'
-                      }`} />
+                      <div
+                        className={`w-3 h-3 rounded-full ${
+                          training.completed ? 'bg-green-500' : 'bg-gray-400'
+                        }`}
+                      />
                       <div>
                         <p className="font-medium">{training.type}</p>
-                        <p className="text-sm text-muted-foreground">{training.date} • {training.duration}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {training.date} • {training.duration}
+                        </p>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
                       {training.completed ? (
                         <div className="flex items-center gap-1">
                           {[...Array(5)].map((_, i) => (
-                            <div 
-                              key={i} 
+                            <div
+                              key={i}
                               className={`w-3 h-3 rounded-full ${
                                 i < training.rating ? 'bg-yellow-400' : 'bg-gray-200'
                               }`}

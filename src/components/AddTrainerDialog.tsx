@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -8,12 +8,18 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { UserPlus2 } from "lucide-react";
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { UserPlus2 } from 'lucide-react';
 
 interface AddTrainerDialogProps {
   onAddTrainer?: (trainer: any) => void;
@@ -22,39 +28,39 @@ interface AddTrainerDialogProps {
 export function AddTrainerDialog({ onAddTrainer }: AddTrainerDialogProps) {
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    specialty: "",
-    experience: "",
-    qualifications: "",
-    hourlyRate: "",
-    notes: ""
+    name: '',
+    email: '',
+    phone: '',
+    specialty: '',
+    experience: '',
+    qualifications: '',
+    hourlyRate: '',
+    notes: '',
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const newTrainer = {
       id: Date.now(),
       ...formData,
       athletes: [],
       weeklyHours: 0,
       rating: 5.0,
-      avatar: "/placeholder.svg"
+      avatar: '/placeholder.svg',
     };
 
     onAddTrainer?.(newTrainer);
     setOpen(false);
     setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      specialty: "",
-      experience: "",
-      qualifications: "",
-      hourlyRate: "",
-      notes: ""
+      name: '',
+      email: '',
+      phone: '',
+      specialty: '',
+      experience: '',
+      qualifications: '',
+      hourlyRate: '',
+      notes: '',
     });
   };
 
@@ -69,11 +75,9 @@ export function AddTrainerDialog({ onAddTrainer }: AddTrainerDialogProps) {
       <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Dodaj Nowego Trenera</DialogTitle>
-          <DialogDescription>
-            Wprowadź dane nowego trenera do systemu klubu.
-          </DialogDescription>
+          <DialogDescription>Wprowadź dane nowego trenera do systemu klubu.</DialogDescription>
         </DialogHeader>
-        
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
@@ -86,7 +90,7 @@ export function AddTrainerDialog({ onAddTrainer }: AddTrainerDialogProps) {
                 required
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="trainerEmail">Email *</Label>
               <Input
@@ -98,7 +102,7 @@ export function AddTrainerDialog({ onAddTrainer }: AddTrainerDialogProps) {
                 required
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="trainerPhone">Telefon</Label>
               <Input
@@ -108,10 +112,13 @@ export function AddTrainerDialog({ onAddTrainer }: AddTrainerDialogProps) {
                 placeholder="+48 123 456 789"
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="specialty">Specjalizacja *</Label>
-              <Select value={formData.specialty} onValueChange={(value) => setFormData({ ...formData, specialty: value })}>
+              <Select
+                value={formData.specialty}
+                onValueChange={(value) => setFormData({ ...formData, specialty: value })}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Wybierz specjalizację" />
                 </SelectTrigger>
@@ -126,7 +133,7 @@ export function AddTrainerDialog({ onAddTrainer }: AddTrainerDialogProps) {
                 </SelectContent>
               </Select>
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="experience">Doświadczenie</Label>
               <Input
@@ -136,7 +143,7 @@ export function AddTrainerDialog({ onAddTrainer }: AddTrainerDialogProps) {
                 placeholder="np. 5 lat, 10 lat"
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="hourlyRate">Stawka godzinowa (PLN)</Label>
               <Input
@@ -148,7 +155,7 @@ export function AddTrainerDialog({ onAddTrainer }: AddTrainerDialogProps) {
               />
             </div>
           </div>
-          
+
           <div className="space-y-2">
             <Label htmlFor="qualifications">Kwalifikacje i certyfikaty</Label>
             <Textarea
@@ -159,7 +166,7 @@ export function AddTrainerDialog({ onAddTrainer }: AddTrainerDialogProps) {
               rows={3}
             />
           </div>
-          
+
           <div className="space-y-2">
             <Label htmlFor="trainerNotes">Dodatkowe informacje</Label>
             <Textarea
@@ -170,7 +177,7 @@ export function AddTrainerDialog({ onAddTrainer }: AddTrainerDialogProps) {
               rows={3}
             />
           </div>
-          
+
           <DialogFooter className="gap-2">
             <Button type="button" variant="outline" onClick={() => setOpen(false)}>
               Anuluj

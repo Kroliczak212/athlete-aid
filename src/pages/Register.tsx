@@ -1,31 +1,37 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Mail, Lock, User, Users, Building } from "lucide-react";
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Mail, Lock, User, Users, Building } from 'lucide-react';
 
 export default function Register() {
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    role: "",
-    clubName: "",
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    role: '',
+    clubName: '',
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Handle registration logic here
-    console.log("Register:", formData);
+    console.log('Register:', formData);
   };
 
   const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   return (
@@ -52,13 +58,13 @@ export default function Register() {
                     type="text"
                     placeholder="imię"
                     value={formData.firstName}
-                    onChange={(e) => handleInputChange("firstName", e.target.value)}
+                    onChange={(e) => handleInputChange('firstName', e.target.value)}
                     className="pl-10"
                     required
                   />
                 </div>
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="lastName">Nazwisko</Label>
                 <Input
@@ -66,7 +72,7 @@ export default function Register() {
                   type="text"
                   placeholder="nazwisko"
                   value={formData.lastName}
-                  onChange={(e) => handleInputChange("lastName", e.target.value)}
+                  onChange={(e) => handleInputChange('lastName', e.target.value)}
                   required
                 />
               </div>
@@ -81,7 +87,7 @@ export default function Register() {
                   type="email"
                   placeholder="wprowadź email"
                   value={formData.email}
-                  onChange={(e) => handleInputChange("email", e.target.value)}
+                  onChange={(e) => handleInputChange('email', e.target.value)}
                   className="pl-10"
                   required
                 />
@@ -90,7 +96,7 @@ export default function Register() {
 
             <div className="space-y-2">
               <Label htmlFor="role">Rola</Label>
-              <Select onValueChange={(value) => handleInputChange("role", value)}>
+              <Select onValueChange={(value) => handleInputChange('role', value)}>
                 <SelectTrigger>
                   <SelectValue placeholder="wybierz rolę" />
                 </SelectTrigger>
@@ -102,7 +108,7 @@ export default function Register() {
               </Select>
             </div>
 
-            {(formData.role === "trainer" || formData.role === "club_manager") && (
+            {(formData.role === 'trainer' || formData.role === 'club_manager') && (
               <div className="space-y-2">
                 <Label htmlFor="clubName">Nazwa klubu</Label>
                 <div className="relative">
@@ -112,14 +118,14 @@ export default function Register() {
                     type="text"
                     placeholder="nazwa klubu"
                     value={formData.clubName}
-                    onChange={(e) => handleInputChange("clubName", e.target.value)}
+                    onChange={(e) => handleInputChange('clubName', e.target.value)}
                     className="pl-10"
                     required
                   />
                 </div>
               </div>
             )}
-            
+
             <div className="space-y-2">
               <Label htmlFor="password">Hasło</Label>
               <div className="relative">
@@ -129,7 +135,7 @@ export default function Register() {
                   type="password"
                   placeholder="wprowadź hasło"
                   value={formData.password}
-                  onChange={(e) => handleInputChange("password", e.target.value)}
+                  onChange={(e) => handleInputChange('password', e.target.value)}
                   className="pl-10"
                   required
                 />
@@ -145,7 +151,7 @@ export default function Register() {
                   type="password"
                   placeholder="potwierdź hasło"
                   value={formData.confirmPassword}
-                  onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
+                  onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
                   className="pl-10"
                   required
                 />
@@ -162,10 +168,7 @@ export default function Register() {
 
           <div className="mt-6 text-center text-sm">
             <span className="text-muted-foreground">Masz już konto? </span>
-            <Link
-              to="/login"
-              className="text-primary hover:underline font-medium"
-            >
+            <Link to="/login" className="text-primary hover:underline font-medium">
               Zaloguj się
             </Link>
           </div>

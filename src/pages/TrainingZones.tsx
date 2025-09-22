@@ -1,24 +1,34 @@
-import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, Calculator, Heart, Info } from "lucide-react";
+import { useState } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { ArrowLeft, Calculator, Heart, Info } from 'lucide-react';
 
 const zoneColors = [
-  { name: "Strefa 1 - Regeneracja", color: "bg-blue-100 text-blue-800", range: "50-60%" },
-  { name: "Strefa 2 - Wytrzymałość podstawowa", color: "bg-green-100 text-green-800", range: "60-70%" },
-  { name: "Strefa 3 - Tempo umiarkowane", color: "bg-yellow-100 text-yellow-800", range: "70-80%" },
-  { name: "Strefa 4 - Próg beztlenowy", color: "bg-orange-100 text-orange-800", range: "80-90%" },
-  { name: "Strefa 5 - Moc beztlenowa", color: "bg-red-100 text-red-800", range: "90-100%" }
+  { name: 'Strefa 1 - Regeneracja', color: 'bg-blue-100 text-blue-800', range: '50-60%' },
+  {
+    name: 'Strefa 2 - Wytrzymałość podstawowa',
+    color: 'bg-green-100 text-green-800',
+    range: '60-70%',
+  },
+  { name: 'Strefa 3 - Tempo umiarkowane', color: 'bg-yellow-100 text-yellow-800', range: '70-80%' },
+  { name: 'Strefa 4 - Próg beztlenowy', color: 'bg-orange-100 text-orange-800', range: '80-90%' },
+  { name: 'Strefa 5 - Moc beztlenowa', color: 'bg-red-100 text-red-800', range: '90-100%' },
 ];
 
 export default function TrainingZones() {
-  const [age, setAge] = useState("");
-  const [maxHR, setMaxHR] = useState("");
-  const [restingHR, setRestingHR] = useState("");
-  const [method, setMethod] = useState("karvonen");
+  const [age, setAge] = useState('');
+  const [maxHR, setMaxHR] = useState('');
+  const [restingHR, setRestingHR] = useState('');
+  const [method, setMethod] = useState('karvonen');
   const [zones, setZones] = useState<any[]>([]);
 
   const handleBack = () => {
@@ -27,90 +37,90 @@ export default function TrainingZones() {
 
   const calculateZones = () => {
     const ageNum = parseInt(age);
-    const maxHRNum = maxHR ? parseInt(maxHR) : (220 - ageNum);
-    const restingHRNum = parseInt(restingHR || "60");
+    const maxHRNum = maxHR ? parseInt(maxHR) : 220 - ageNum;
+    const restingHRNum = parseInt(restingHR || '60');
 
     let calculatedZones = [];
 
-    if (method === "karvonen") {
+    if (method === 'karvonen') {
       // Metoda Karvonena (HRR - Heart Rate Reserve)
       const hrReserve = maxHRNum - restingHRNum;
-      
+
       calculatedZones = [
         {
           zone: 1,
-          name: "Regeneracja",
-          min: Math.round(restingHRNum + (hrReserve * 0.5)),
-          max: Math.round(restingHRNum + (hrReserve * 0.6)),
-          color: "bg-blue-100 text-blue-800"
+          name: 'Regeneracja',
+          min: Math.round(restingHRNum + hrReserve * 0.5),
+          max: Math.round(restingHRNum + hrReserve * 0.6),
+          color: 'bg-blue-100 text-blue-800',
         },
         {
           zone: 2,
-          name: "Wytrzymałość podstawowa",
-          min: Math.round(restingHRNum + (hrReserve * 0.6)),
-          max: Math.round(restingHRNum + (hrReserve * 0.7)),
-          color: "bg-green-100 text-green-800"
+          name: 'Wytrzymałość podstawowa',
+          min: Math.round(restingHRNum + hrReserve * 0.6),
+          max: Math.round(restingHRNum + hrReserve * 0.7),
+          color: 'bg-green-100 text-green-800',
         },
         {
           zone: 3,
-          name: "Tempo umiarkowane",
-          min: Math.round(restingHRNum + (hrReserve * 0.7)),
-          max: Math.round(restingHRNum + (hrReserve * 0.8)),
-          color: "bg-yellow-100 text-yellow-800"
+          name: 'Tempo umiarkowane',
+          min: Math.round(restingHRNum + hrReserve * 0.7),
+          max: Math.round(restingHRNum + hrReserve * 0.8),
+          color: 'bg-yellow-100 text-yellow-800',
         },
         {
           zone: 4,
-          name: "Próg beztlenowy",
-          min: Math.round(restingHRNum + (hrReserve * 0.8)),
-          max: Math.round(restingHRNum + (hrReserve * 0.9)),
-          color: "bg-orange-100 text-orange-800"
+          name: 'Próg beztlenowy',
+          min: Math.round(restingHRNum + hrReserve * 0.8),
+          max: Math.round(restingHRNum + hrReserve * 0.9),
+          color: 'bg-orange-100 text-orange-800',
         },
         {
           zone: 5,
-          name: "Moc beztlenowa",
-          min: Math.round(restingHRNum + (hrReserve * 0.9)),
+          name: 'Moc beztlenowa',
+          min: Math.round(restingHRNum + hrReserve * 0.9),
           max: maxHRNum,
-          color: "bg-red-100 text-red-800"
-        }
+          color: 'bg-red-100 text-red-800',
+        },
       ];
     } else {
       // Metoda % HRmax
       calculatedZones = [
         {
           zone: 1,
-          name: "Regeneracja",
+          name: 'Regeneracja',
           min: Math.round(maxHRNum * 0.5),
           max: Math.round(maxHRNum * 0.6),
-          color: "bg-blue-100 text-blue-800"
+          color: 'bg-blue-100 text-blue-800',
         },
         {
           zone: 2,
-          name: "Wytrzymałość podstawowa",
+          name: 'Wytrzymałość podstawowa',
           min: Math.round(maxHRNum * 0.6),
           max: Math.round(maxHRNum * 0.7),
-          color: "bg-green-100 text-green-800"
+          color: 'bg-green-100 text-green-800',
         },
         {
           zone: 3,
-          name: "Tempo umiarkowane",
+          name: 'Tempo umiarkowane',
           min: Math.round(maxHRNum * 0.7),
           max: Math.round(maxHRNum * 0.8),
-          color: "bg-yellow-100 text-yellow-800"
+          color: 'bg-yellow-100 text-yellow-800',
         },
         {
           zone: 4,
-          name: "Próg beztlenowy",
+          name: 'Próg beztlenowy',
           min: Math.round(maxHRNum * 0.8),
           max: Math.round(maxHRNum * 0.9),
-          color: "bg-orange-100 text-orange-800"
+          color: 'bg-orange-100 text-orange-800',
         },
         {
           zone: 5,
-          name: "Moc beztlenowa",
+          name: 'Moc beztlenowa',
           min: Math.round(maxHRNum * 0.9),
           max: maxHRNum,
-          color: "bg-red-100 text-red-800"
-        }
+          color: 'bg-red-100 text-red-800',
+        },
       ];
     }
 
@@ -126,9 +136,7 @@ export default function TrainingZones() {
         </Button>
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Kalkulator Progów Treningowych</h1>
-          <p className="text-muted-foreground">
-            Oblicz personalizowane strefy tętna dla sportowca
-          </p>
+          <p className="text-muted-foreground">Oblicz personalizowane strefy tętna dla sportowca</p>
         </div>
       </div>
 
@@ -196,8 +204,8 @@ export default function TrainingZones() {
               </Select>
             </div>
 
-            <Button 
-              onClick={calculateZones} 
+            <Button
+              onClick={calculateZones}
               disabled={!age}
               className="w-full bg-primary hover:bg-sport-hover text-primary-foreground"
             >
@@ -220,16 +228,15 @@ export default function TrainingZones() {
               <div className="p-3 bg-sport-accent rounded-lg">
                 <h4 className="font-semibold text-sm">Metoda Karvonena (zalecana)</h4>
                 <p className="text-xs text-muted-foreground mt-1">
-                  Uwzględnia tętno spoczynkowe, co czyni ją bardziej precyzyjną dla każdego sportowca.
-                  Wzór: (HRmax - HRrest) × % + HRrest
+                  Uwzględnia tętno spoczynkowe, co czyni ją bardziej precyzyjną dla każdego
+                  sportowca. Wzór: (HRmax - HRrest) × % + HRrest
                 </p>
               </div>
 
               <div className="p-3 bg-sport-accent rounded-lg">
                 <h4 className="font-semibold text-sm">% Maksymalnego tętna</h4>
                 <p className="text-xs text-muted-foreground mt-1">
-                  Prosta metoda oparta tylko na maksymalnym tętnie.
-                  Wzór: HRmax × %
+                  Prosta metoda oparta tylko na maksymalnym tętnie. Wzór: HRmax × %
                 </p>
               </div>
             </div>
@@ -238,7 +245,10 @@ export default function TrainingZones() {
               <h4 className="font-semibold">Strefy treningowe:</h4>
               <div className="space-y-2">
                 {zoneColors.map((zone, index) => (
-                  <div key={index} className="flex items-center justify-between p-2 bg-sport-accent rounded text-sm">
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-2 bg-sport-accent rounded text-sm"
+                  >
                     <span className="font-medium">{zone.name}</span>
                     <span className="text-xs text-muted-foreground">{zone.range}</span>
                   </div>
@@ -261,7 +271,7 @@ export default function TrainingZones() {
           <CardContent>
             <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
               {zones.map((zone) => (
-                <div 
+                <div
                   key={zone.zone}
                   className="p-4 border border-border rounded-lg bg-sport-accent"
                 >

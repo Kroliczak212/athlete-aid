@@ -1,11 +1,24 @@
-import { useState } from "react";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { MessageSquare, AlertCircle, CheckCircle, Info } from "lucide-react";
+import { useState } from 'react';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
+import { MessageSquare, AlertCircle, CheckCircle, Info } from 'lucide-react';
 
 interface FeedbackDialogProps {
   children: React.ReactNode;
@@ -14,48 +27,54 @@ interface FeedbackDialogProps {
 
 export function FeedbackDialog({ children, athleteName }: FeedbackDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [feedbackType, setFeedbackType] = useState("");
-  const [message, setMessage] = useState("");
-  const [priority, setPriority] = useState("normal");
+  const [feedbackType, setFeedbackType] = useState('');
+  const [message, setMessage] = useState('');
+  const [priority, setPriority] = useState('normal');
 
   const handleSend = () => {
     // Here you would send the feedback
-    console.log("Sending feedback:", {
+    console.log('Sending feedback:', {
       athleteName,
       feedbackType,
       message,
-      priority
+      priority,
     });
     setIsOpen(false);
     // Reset form
-    setFeedbackType("");
-    setMessage("");
-    setPriority("normal");
+    setFeedbackType('');
+    setMessage('');
+    setPriority('normal');
   };
 
   const getFeedbackIcon = (type: string) => {
     switch (type) {
-      case 'correction': return <AlertCircle className="h-4 w-4 text-sport-warning" />;
-      case 'praise': return <CheckCircle className="h-4 w-4 text-sport-success" />;
-      case 'instruction': return <Info className="h-4 w-4 text-primary" />;
-      default: return <MessageSquare className="h-4 w-4" />;
+      case 'correction':
+        return <AlertCircle className="h-4 w-4 text-sport-warning" />;
+      case 'praise':
+        return <CheckCircle className="h-4 w-4 text-sport-success" />;
+      case 'instruction':
+        return <Info className="h-4 w-4 text-primary" />;
+      default:
+        return <MessageSquare className="h-4 w-4" />;
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'high': return 'destructive';
-      case 'normal': return 'secondary';
-      case 'low': return 'outline';
-      default: return 'secondary';
+      case 'high':
+        return 'destructive';
+      case 'normal':
+        return 'secondary';
+      case 'low':
+        return 'outline';
+      default:
+        return 'secondary';
     }
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        {children}
-      </DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
@@ -63,7 +82,7 @@ export function FeedbackDialog({ children, athleteName }: FeedbackDialogProps) {
             Wyślij Uwagi
           </DialogTitle>
           <DialogDescription>
-            {athleteName ? `Przekaż uwagi dla: ${athleteName}` : "Wyślij uwagi do sportowca"}
+            {athleteName ? `Przekaż uwagi dla: ${athleteName}` : 'Wyślij uwagi do sportowca'}
           </DialogDescription>
         </DialogHeader>
 
@@ -141,9 +160,7 @@ export function FeedbackDialog({ children, athleteName }: FeedbackDialogProps) {
                   {priority === 'high' ? 'Wysoki' : priority === 'low' ? 'Niski' : 'Normalny'}
                 </Badge>
               </div>
-              <p className="text-sm text-muted-foreground">
-                {message || "Treść uwagi..."}
-              </p>
+              <p className="text-sm text-muted-foreground">{message || 'Treść uwagi...'}</p>
             </div>
           )}
 
@@ -152,7 +169,7 @@ export function FeedbackDialog({ children, athleteName }: FeedbackDialogProps) {
             <Button variant="outline" onClick={() => setIsOpen(false)}>
               Anuluj
             </Button>
-            <Button 
+            <Button
               onClick={handleSend}
               disabled={!feedbackType || !message.trim()}
               className="bg-primary hover:bg-sport-hover text-primary-foreground"

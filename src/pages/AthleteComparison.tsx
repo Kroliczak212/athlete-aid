@@ -1,27 +1,44 @@
-import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar } from "recharts";
-import { ArrowLeft, TrendingUp, Users } from "lucide-react";
+import { useState } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+} from 'recharts';
+import { ArrowLeft, TrendingUp, Users } from 'lucide-react';
 
 const mockAthletes = [
-  { id: "1", name: "Anna Kowalska", sport: "Pływanie" },
-  { id: "2", name: "Tomasz Nowak", sport: "Triathlon" },
-  { id: "3", name: "Maria Wiśniewska", sport: "Bieganie" }
+  { id: '1', name: 'Anna Kowalska', sport: 'Pływanie' },
+  { id: '2', name: 'Tomasz Nowak', sport: 'Triathlon' },
+  { id: '3', name: 'Maria Wiśniewska', sport: 'Bieganie' },
 ];
 
 const mockComparisonData = [
-  { week: "Tydzień 1", athlete1: 142, athlete2: 156, distance1: 15.2, distance2: 18.1 },
-  { week: "Tydzień 2", athlete1: 145, athlete2: 152, distance1: 16.8, distance2: 19.5 },
-  { week: "Tydzień 3", athlete1: 140, athlete2: 158, distance1: 18.1, distance2: 20.2 },
-  { week: "Tydzień 4", athlete1: 138, athlete2: 154, distance1: 17.5, distance2: 21.8 }
+  { week: 'Tydzień 1', athlete1: 142, athlete2: 156, distance1: 15.2, distance2: 18.1 },
+  { week: 'Tydzień 2', athlete1: 145, athlete2: 152, distance1: 16.8, distance2: 19.5 },
+  { week: 'Tydzień 3', athlete1: 140, athlete2: 158, distance1: 18.1, distance2: 20.2 },
+  { week: 'Tydzień 4', athlete1: 138, athlete2: 154, distance1: 17.5, distance2: 21.8 },
 ];
 
 export default function AthleteComparison() {
-  const [athlete1, setAthlete1] = useState("");
-  const [athlete2, setAthlete2] = useState("");
-  const [comparisonType, setComparisonType] = useState("athletes");
+  const [athlete1, setAthlete1] = useState('');
+  const [athlete2, setAthlete2] = useState('');
+  const [comparisonType, setComparisonType] = useState('athletes');
 
   const handleBack = () => {
     window.history.back();
@@ -62,7 +79,7 @@ export default function AthleteComparison() {
               </SelectContent>
             </Select>
 
-            {comparisonType === "athletes" ? (
+            {comparisonType === 'athletes' ? (
               <>
                 <Select value={athlete1} onValueChange={setAthlete1}>
                   <SelectTrigger>
@@ -82,11 +99,13 @@ export default function AthleteComparison() {
                     <SelectValue placeholder="Wybierz drugiego sportowca" />
                   </SelectTrigger>
                   <SelectContent>
-                    {mockAthletes.filter(a => a.name !== athlete1).map((athlete) => (
-                      <SelectItem key={athlete.id} value={athlete.name}>
-                        {athlete.name} - {athlete.sport}
-                      </SelectItem>
-                    ))}
+                    {mockAthletes
+                      .filter((a) => a.name !== athlete1)
+                      .map((athlete) => (
+                        <SelectItem key={athlete.id} value={athlete.name}>
+                          {athlete.name} - {athlete.sport}
+                        </SelectItem>
+                      ))}
                   </SelectContent>
                 </Select>
               </>
@@ -132,14 +151,12 @@ export default function AthleteComparison() {
       </Card>
 
       {/* Comparison Charts */}
-      {athlete1 && (comparisonType === "periods" || athlete2) && (
+      {athlete1 && (comparisonType === 'periods' || athlete2) && (
         <div className="grid gap-6 md:grid-cols-2">
           <Card className="border-border bg-card">
             <CardHeader>
               <CardTitle>Średnie tętno</CardTitle>
-              <CardDescription>
-                Porównanie średniego tętna podczas treningów
-              </CardDescription>
+              <CardDescription>Porównanie średniego tętna podczas treningów</CardDescription>
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={300}>
@@ -149,17 +166,17 @@ export default function AthleteComparison() {
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Line 
-                    type="monotone" 
-                    dataKey="athlete1" 
-                    stroke="hsl(var(--primary))" 
-                    name={comparisonType === "athletes" ? athlete1 : "Pierwszy okres"}
+                  <Line
+                    type="monotone"
+                    dataKey="athlete1"
+                    stroke="hsl(var(--primary))"
+                    name={comparisonType === 'athletes' ? athlete1 : 'Pierwszy okres'}
                   />
-                  <Line 
-                    type="monotone" 
-                    dataKey="athlete2" 
-                    stroke="hsl(var(--secondary))" 
-                    name={comparisonType === "athletes" ? athlete2 : "Drugi okres"}
+                  <Line
+                    type="monotone"
+                    dataKey="athlete2"
+                    stroke="hsl(var(--secondary))"
+                    name={comparisonType === 'athletes' ? athlete2 : 'Drugi okres'}
                   />
                 </LineChart>
               </ResponsiveContainer>
@@ -169,9 +186,7 @@ export default function AthleteComparison() {
           <Card className="border-border bg-card">
             <CardHeader>
               <CardTitle>Dystans tygodniowy</CardTitle>
-              <CardDescription>
-                Porównanie pokonanego dystansu w km
-              </CardDescription>
+              <CardDescription>Porównanie pokonanego dystansu w km</CardDescription>
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={300}>
@@ -181,15 +196,15 @@ export default function AthleteComparison() {
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Bar 
-                    dataKey="distance1" 
-                    fill="hsl(var(--primary))" 
-                    name={comparisonType === "athletes" ? athlete1 : "Pierwszy okres"}
+                  <Bar
+                    dataKey="distance1"
+                    fill="hsl(var(--primary))"
+                    name={comparisonType === 'athletes' ? athlete1 : 'Pierwszy okres'}
                   />
-                  <Bar 
-                    dataKey="distance2" 
-                    fill="hsl(var(--secondary))" 
-                    name={comparisonType === "athletes" ? athlete2 : "Drugi okres"}
+                  <Bar
+                    dataKey="distance2"
+                    fill="hsl(var(--secondary))"
+                    name={comparisonType === 'athletes' ? athlete2 : 'Drugi okres'}
                   />
                 </BarChart>
               </ResponsiveContainer>
@@ -199,7 +214,7 @@ export default function AthleteComparison() {
       )}
 
       {/* Summary */}
-      {athlete1 && (comparisonType === "periods" || athlete2) && (
+      {athlete1 && (comparisonType === 'periods' || athlete2) && (
         <Card className="border-border bg-card">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">

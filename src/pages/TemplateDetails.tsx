@@ -1,119 +1,114 @@
-import { useParams, Link } from "react-router-dom";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { 
-  ArrowLeft, 
-  Users, 
-  Clock, 
-  Target, 
-  Calendar,
-  Download,
-  Copy
-} from "lucide-react";
+import { useParams, Link } from 'react-router-dom';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { ArrowLeft, Users, Clock, Target, Calendar, Download, Copy } from 'lucide-react';
 
 const mockTemplateDetails = {
-  "swimming-beginner": {
-    name: "Pływanie - Początkujący",
-    sport: "Pływanie",
-    level: "Początkujący",
-    duration: "8 tygodni",
+  'swimming-beginner': {
+    name: 'Pływanie - Początkujący',
+    sport: 'Pływanie',
+    level: 'Początkujący',
+    duration: '8 tygodni',
     sessionsPerWeek: 2,
     totalSessions: 16,
-    description: "Podstawowy plan treningowy dla osób rozpoczynających przygodę z pływaniem. Skupia się na nauce podstawowych technik pływackich oraz budowaniu podstawowej kondycji.",
+    description:
+      'Podstawowy plan treningowy dla osób rozpoczynających przygodę z pływaniem. Skupia się na nauce podstawowych technik pływackich oraz budowaniu podstawowej kondycji.',
     goals: [
-      "Nauka techniki kraul i grzbiet",
-      "Budowanie wytrzymałości oddechowej",
-      "Podstawy techniki pływania",
-      "Bezpieczne poruszanie się w wodzie"
+      'Nauka techniki kraul i grzbiet',
+      'Budowanie wytrzymałości oddechowej',
+      'Podstawy techniki pływania',
+      'Bezpieczne poruszanie się w wodzie',
     ],
     equipment: [
-      "Kostium kąpielowy",
-      "Okulary pływackie",
-      "Czepek (opcjonalnie)",
-      "Deska do pływania",
-      "Pullbuoy"
+      'Kostium kąpielowy',
+      'Okulary pływackie',
+      'Czepek (opcjonalnie)',
+      'Deska do pływania',
+      'Pullbuoy',
     ],
     weeklyStructure: [
       {
-        week: "1-2",
-        focus: "Adaptacja wodna",
+        week: '1-2',
+        focus: 'Adaptacja wodna',
         sessions: [
           {
-            day: "Poniedziałek",
+            day: 'Poniedziałek',
             duration: 45,
             exercises: [
-              "Rozgrzewka na brzegu - 5 min",
-              "Adaptacja wodna - chodzenie w wodzie - 10 min",
-              "Podstawy kraul - 4x25m z przerwami",
-              "Ćwiczenia oddechowe - 5 min",
-              "Swobodne pływanie - 10 min"
-            ]
+              'Rozgrzewka na brzegu - 5 min',
+              'Adaptacja wodna - chodzenie w wodzie - 10 min',
+              'Podstawy kraul - 4x25m z przerwami',
+              'Ćwiczenia oddechowe - 5 min',
+              'Swobodne pływanie - 10 min',
+            ],
           },
           {
-            day: "Środa",
+            day: 'Środa',
             duration: 45,
             exercises: [
-              "Rozgrzewka - 5 min chodzenia w wodzie",
-              "Technika grzbiet - 4x25m",
-              "Kraul z deską - 6x25m",
-              "Ćwiczenia nog - 5 min",
-              "Wyciszenie - 5 min swobodnego pływania"
-            ]
-          }
-        ]
+              'Rozgrzewka - 5 min chodzenia w wodzie',
+              'Technika grzbiet - 4x25m',
+              'Kraul z deską - 6x25m',
+              'Ćwiczenia nog - 5 min',
+              'Wyciszenie - 5 min swobodnego pływania',
+            ],
+          },
+        ],
       },
       {
-        week: "3-4",
-        focus: "Podstawowa technika",
+        week: '3-4',
+        focus: 'Podstawowa technika',
         sessions: [
           {
-            day: "Poniedziałek",
+            day: 'Poniedziałek',
             duration: 60,
             exercises: [
-              "Rozgrzewka - 100m swobodnie",
-              "Technika kraul - 6x50m",
-              "Ćwiczenia oddechowe - 8x25m",
-              "Podstawy grzbiet - 4x50m",
-              "Wyciszenie - 100m spokojnie"
-            ]
+              'Rozgrzewka - 100m swobodnie',
+              'Technika kraul - 6x50m',
+              'Ćwiczenia oddechowe - 8x25m',
+              'Podstawy grzbiet - 4x50m',
+              'Wyciszenie - 100m spokojnie',
+            ],
           },
           {
-            day: "Środa",
+            day: 'Środa',
             duration: 60,
             exercises: [
-              "Rozgrzewka - 150m mieszanką",
-              "Kraul z pullbuoy - 6x50m",
-              "Ćwiczenia nog grzbiet - 4x50m",
-              "Technika kraul kompletna - 4x50m",
-              "Wyciszenie - 100m dowolnym stylem"
-            ]
-          }
-        ]
-      }
+              'Rozgrzewka - 150m mieszanką',
+              'Kraul z pullbuoy - 6x50m',
+              'Ćwiczenia nog grzbiet - 4x50m',
+              'Technika kraul kompletna - 4x50m',
+              'Wyciszenie - 100m dowolnym stylem',
+            ],
+          },
+        ],
+      },
     ],
     tips: [
-      "Zawsze rozpoczynaj trening od rozgrzewki",
-      "Skup się na technice, a nie na szybkości",
-      "Regularność jest kluczowa - nie opuszczaj treningów",
-      "Pij dużo wody przed i po treningu",
-      "Słuchaj swojego ciała - odpoczywaj gdy potrzebujesz"
-    ]
-  }
+      'Zawsze rozpoczynaj trening od rozgrzewki',
+      'Skup się na technice, a nie na szybkości',
+      'Regularność jest kluczowa - nie opuszczaj treningów',
+      'Pij dużo wody przed i po treningu',
+      'Słuchaj swojego ciała - odpoczywaj gdy potrzebujesz',
+    ],
+  },
 };
 
 export default function TemplateDetails() {
   const { id } = useParams();
-  const template = mockTemplateDetails[id as keyof typeof mockTemplateDetails] || mockTemplateDetails["swimming-beginner"];
+  const template =
+    mockTemplateDetails[id as keyof typeof mockTemplateDetails] ||
+    mockTemplateDetails['swimming-beginner'];
 
   const handleUseTemplate = () => {
     // Logic to use template
-    console.log("Using template:", template.name);
+    console.log('Using template:', template.name);
   };
 
   const handleCopyTemplate = () => {
     // Logic to copy template
-    console.log("Copying template:", template.name);
+    console.log('Copying template:', template.name);
   };
 
   return (
@@ -130,15 +125,15 @@ export default function TemplateDetails() {
           <p className="text-muted-foreground">Szablon treningowy • {template.sport}</p>
         </div>
         <div className="flex gap-2">
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             onClick={handleCopyTemplate}
             className="border-border hover:bg-sport-accent"
           >
             <Copy className="mr-2 h-4 w-4" />
             Kopiuj
           </Button>
-          <Button 
+          <Button
             onClick={handleUseTemplate}
             className="bg-primary hover:bg-sport-hover text-primary-foreground shadow-sport"
           >
@@ -264,7 +259,7 @@ export default function TemplateDetails() {
                 </Badge>
                 <h3 className="font-semibold">{period.focus}</h3>
               </div>
-              
+
               <div className="grid gap-4 md:grid-cols-2">
                 {period.sessions.map((session, sessionIndex) => (
                   <Card key={sessionIndex} className="border-border bg-sport-accent">

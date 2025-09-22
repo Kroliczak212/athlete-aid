@@ -1,7 +1,7 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { AuthAPI } from "../../endpoints/auth.api";
-import { useAuth } from "../../../auth/useAuth";
-import type { LoginRequest, LoginResponse } from "../../schemas/auth.schema";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { AuthAPI } from '../../endpoints/auth.api';
+import { useAuth } from '../../../auth/useAuth';
+import type { LoginRequest, LoginResponse } from '../../schemas/auth.schema';
 
 export function useLogin() {
   const { setTokens } = useAuth();
@@ -14,7 +14,7 @@ export function useLogin() {
         accessToken: res.accessToken,
         refreshToken: res.refreshToken ?? null,
       });
-      qc.invalidateQueries({ queryKey: ["me"] });
+      qc.invalidateQueries({ queryKey: ['me'] });
     },
   });
 }

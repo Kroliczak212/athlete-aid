@@ -1,6 +1,6 @@
 // Proste trzymanie tokenów w pamięci + localStorage.
 type Session = { accessToken: string | null; refreshToken?: string | null };
-const KEY = "auth.session";
+const KEY = 'auth.session';
 
 let memory: Session = { accessToken: null, refreshToken: null };
 

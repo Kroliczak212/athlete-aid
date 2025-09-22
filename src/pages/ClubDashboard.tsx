@@ -1,19 +1,25 @@
-import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { 
-  Users, 
-  UserCheck, 
-  Calendar, 
-  Clock, 
-  TrendingUp, 
-  ChevronDown, 
+import { useState } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import {
+  Users,
+  UserCheck,
+  Calendar,
+  Clock,
+  TrendingUp,
+  ChevronDown,
   ChevronRight,
   Phone,
   Mail,
@@ -23,257 +29,265 @@ import {
   AlertCircle,
   DollarSign,
   FileText,
-  BarChart3
-} from "lucide-react";
-import { AddAthleteDialog } from "@/components/AddAthleteDialog";
-import { AddTrainerDialog } from "@/components/AddTrainerDialog";
+  BarChart3,
+} from 'lucide-react';
+import { AddAthleteDialog } from '@/components/AddAthleteDialog';
+import { AddTrainerDialog } from '@/components/AddTrainerDialog';
 
 // Enhanced mock data with payment information
 const mockClubStats = [
-  { title: "Łączna liczba trenerów", value: "12", icon: Users, trend: "+2" },
-  { title: "Aktywni sportowcy", value: "156", icon: UserCheck, trend: "+8" },
-  { title: "Przychody tego miesiąca", value: "24,500 PLN", icon: DollarSign, trend: "+12%" },
-  { title: "Średnia ocena klubu", value: "4.8", icon: Star, trend: "+0.1" }
+  { title: 'Łączna liczba trenerów', value: '12', icon: Users, trend: '+2' },
+  { title: 'Aktywni sportowcy', value: '156', icon: UserCheck, trend: '+8' },
+  { title: 'Przychody tego miesiąca', value: '24,500 PLN', icon: DollarSign, trend: '+12%' },
+  { title: 'Średnia ocena klubu', value: '4.8', icon: Star, trend: '+0.1' },
 ];
 
 const mockTrainers = [
   {
     id: 1,
-    name: "Anna Kowalska",
-    specialty: "Siatkówka",
-    experience: "8 lat",
-    email: "anna.kowalska@klub.pl",
-    phone: "+48 123 456 789",
-    avatar: "/placeholder.svg",
+    name: 'Anna Kowalska',
+    specialty: 'Siatkówka',
+    experience: '8 lat',
+    email: 'anna.kowalska@klub.pl',
+    phone: '+48 123 456 789',
+    avatar: '/placeholder.svg',
     hourlyRate: 150,
     monthlyEarnings: 4500,
     athletes: [
-      { 
-        id: 1, 
-        name: "Maja Nowak", 
-        sessions: 12, 
-        nextSession: "2024-01-15", 
-        performance: "Dobra",
+      {
+        id: 1,
+        name: 'Maja Nowak',
+        sessions: 12,
+        nextSession: '2024-01-15',
+        performance: 'Dobra',
         monthlyPayment: 480,
         paid: true,
-        hoursThisMonth: 8
+        hoursThisMonth: 8,
       },
-      { 
-        id: 2, 
-        name: "Tomasz Wiśniewski", 
-        sessions: 8, 
-        nextSession: "2024-01-16", 
-        performance: "Bardzo dobra",
+      {
+        id: 2,
+        name: 'Tomasz Wiśniewski',
+        sessions: 8,
+        nextSession: '2024-01-16',
+        performance: 'Bardzo dobra',
         monthlyPayment: 720,
         paid: false,
-        hoursThisMonth: 12
+        hoursThisMonth: 12,
       },
-      { 
-        id: 3, 
-        name: "Ola Kowalczyk", 
-        sessions: 15, 
-        nextSession: "2024-01-15", 
-        performance: "Średnia",
+      {
+        id: 3,
+        name: 'Ola Kowalczyk',
+        sessions: 15,
+        nextSession: '2024-01-15',
+        performance: 'Średnia',
         monthlyPayment: 600,
         paid: true,
-        hoursThisMonth: 10
-      }
+        hoursThisMonth: 10,
+      },
     ],
     weeklyHours: 32,
     rating: 4.9,
     trainingPlans: [
-      { id: 1, name: "Plan siatkarski podstawowy", athletes: 8 },
-      { id: 2, name: "Plan zaawansowany", athletes: 4 }
-    ]
+      { id: 1, name: 'Plan siatkarski podstawowy', athletes: 8 },
+      { id: 2, name: 'Plan zaawansowany', athletes: 4 },
+    ],
   },
   {
     id: 2,
-    name: "Marek Nowicki",
-    specialty: "Piłka nożna",
-    experience: "12 lat",
-    email: "marek.nowicki@klub.pl",
-    phone: "+48 987 654 321",
-    avatar: "/placeholder.svg",
+    name: 'Marek Nowicki',
+    specialty: 'Piłka nożna',
+    experience: '12 lat',
+    email: 'marek.nowicki@klub.pl',
+    phone: '+48 987 654 321',
+    avatar: '/placeholder.svg',
     hourlyRate: 180,
     monthlyEarnings: 5400,
     athletes: [
-      { 
-        id: 4, 
-        name: "Jakub Zieliński", 
-        sessions: 10, 
-        nextSession: "2024-01-17", 
-        performance: "Dobra",
+      {
+        id: 4,
+        name: 'Jakub Zieliński',
+        sessions: 10,
+        nextSession: '2024-01-17',
+        performance: 'Dobra',
         monthlyPayment: 900,
         paid: true,
-        hoursThisMonth: 15
+        hoursThisMonth: 15,
       },
-      { 
-        id: 5, 
-        name: "Adam Wójcik", 
-        sessions: 6, 
-        nextSession: "2024-01-18", 
-        performance: "Bardzo dobra",
+      {
+        id: 5,
+        name: 'Adam Wójcik',
+        sessions: 6,
+        nextSession: '2024-01-18',
+        performance: 'Bardzo dobra',
         monthlyPayment: 540,
         paid: false,
-        hoursThisMonth: 9
-      }
+        hoursThisMonth: 9,
+      },
     ],
     weeklyHours: 28,
     rating: 4.7,
     trainingPlans: [
-      { id: 3, name: "Technika piłkarska", athletes: 6 },
-      { id: 4, name: "Kondycja dla piłkarzy", athletes: 3 }
-    ]
+      { id: 3, name: 'Technika piłkarska', athletes: 6 },
+      { id: 4, name: 'Kondycja dla piłkarzy', athletes: 3 },
+    ],
   },
   {
     id: 3,
-    name: "Katarzyna Dąbrowska",
-    specialty: "Koszykówka",
-    experience: "6 lat",
-    email: "katarzyna.dabrowska@klub.pl",
-    phone: "+48 555 444 333",
-    avatar: "/placeholder.svg",
+    name: 'Katarzyna Dąbrowska',
+    specialty: 'Koszykówka',
+    experience: '6 lat',
+    email: 'katarzyna.dabrowska@klub.pl',
+    phone: '+48 555 444 333',
+    avatar: '/placeholder.svg',
     hourlyRate: 140,
     monthlyEarnings: 4200,
     athletes: [
-      { 
-        id: 6, 
-        name: "Natalia Król", 
-        sessions: 14, 
-        nextSession: "2024-01-16", 
-        performance: "Bardzo dobra",
+      {
+        id: 6,
+        name: 'Natalia Król',
+        sessions: 14,
+        nextSession: '2024-01-16',
+        performance: 'Bardzo dobra',
         monthlyPayment: 700,
         paid: true,
-        hoursThisMonth: 14
+        hoursThisMonth: 14,
       },
-      { 
-        id: 7, 
-        name: "Paweł Mazur", 
-        sessions: 9, 
-        nextSession: "2024-01-19", 
-        performance: "Dobra",
+      {
+        id: 7,
+        name: 'Paweł Mazur',
+        sessions: 9,
+        nextSession: '2024-01-19',
+        performance: 'Dobra',
         monthlyPayment: 450,
         paid: true,
-        hoursThisMonth: 9
+        hoursThisMonth: 9,
       },
-      { 
-        id: 8, 
-        name: "Julia Pawlak", 
-        sessions: 11, 
-        nextSession: "2024-01-17", 
-        performance: "Średnia",
+      {
+        id: 8,
+        name: 'Julia Pawlak',
+        sessions: 11,
+        nextSession: '2024-01-17',
+        performance: 'Średnia',
         monthlyPayment: 550,
         paid: false,
-        hoursThisMonth: 11
-      }
+        hoursThisMonth: 11,
+      },
     ],
     weeklyHours: 35,
     rating: 4.8,
     trainingPlans: [
-      { id: 5, name: "Koszykówka dla młodzieży", athletes: 7 },
-      { id: 6, name: "Drużynowa koszykówka", athletes: 5 }
-    ]
-  }
+      { id: 5, name: 'Koszykówka dla młodzieży', athletes: 7 },
+      { id: 6, name: 'Drużynowa koszykówka', athletes: 5 },
+    ],
+  },
 ];
 
 const mockClubAthletes = [
-  { 
-    id: 9, 
-    name: "Michał Szymański", 
-    sport: "Tenis", 
-    level: "Średniozaawansowany", 
+  {
+    id: 9,
+    name: 'Michał Szymański',
+    sport: 'Tenis',
+    level: 'Średniozaawansowany',
     sessions: 20,
     monthlyPayment: 800,
     paid: true,
-    hoursThisMonth: 16
+    hoursThisMonth: 16,
   },
-  { 
-    id: 10, 
-    name: "Aleksandra Wojciechowska", 
-    sport: "Badminton", 
-    level: "Początkujący", 
+  {
+    id: 10,
+    name: 'Aleksandra Wojciechowska',
+    sport: 'Badminton',
+    level: 'Początkujący',
     sessions: 8,
     monthlyPayment: 320,
     paid: false,
-    hoursThisMonth: 8
+    hoursThisMonth: 8,
   },
-  { 
-    id: 11, 
-    name: "Robert Kaczmarek", 
-    sport: "Tenis stołowy", 
-    level: "Zaawansowany", 
+  {
+    id: 11,
+    name: 'Robert Kaczmarek',
+    sport: 'Tenis stołowy',
+    level: 'Zaawansowany',
     sessions: 25,
     monthlyPayment: 1000,
     paid: true,
-    hoursThisMonth: 20
-  }
+    hoursThisMonth: 20,
+  },
 ];
 
 export default function ClubDashboard() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedSport, setSelectedSport] = useState("all");
-  const [paymentFilter, setPaymentFilter] = useState("all");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedSport, setSelectedSport] = useState('all');
+  const [paymentFilter, setPaymentFilter] = useState('all');
   const [expandedTrainers, setExpandedTrainers] = useState<number[]>([]);
 
   const toggleTrainer = (trainerId: number) => {
-    setExpandedTrainers(prev => 
-      prev.includes(trainerId) 
-        ? prev.filter(id => id !== trainerId)
-        : [...prev, trainerId]
+    setExpandedTrainers((prev) =>
+      prev.includes(trainerId) ? prev.filter((id) => id !== trainerId) : [...prev, trainerId],
     );
   };
 
-  const filteredTrainers = mockTrainers.filter(trainer => {
-    const matchesSearch = trainer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         trainer.specialty.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesSport = selectedSport === "all" || trainer.specialty.toLowerCase().includes(selectedSport.toLowerCase());
+  const filteredTrainers = mockTrainers.filter((trainer) => {
+    const matchesSearch =
+      trainer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      trainer.specialty.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSport =
+      selectedSport === 'all' ||
+      trainer.specialty.toLowerCase().includes(selectedSport.toLowerCase());
     const hasTrainingPlans = trainer.trainingPlans && trainer.trainingPlans.length > 0;
     return matchesSearch && matchesSport && hasTrainingPlans;
   });
 
   const allAthletes = [
-    ...mockTrainers.flatMap(trainer => 
-      trainer.athletes.map(athlete => ({ 
-        ...athlete, 
-        trainer: trainer.name, 
+    ...mockTrainers.flatMap((trainer) =>
+      trainer.athletes.map((athlete) => ({
+        ...athlete,
+        trainer: trainer.name,
         trainerSpecialty: trainer.specialty,
-        trainerRate: trainer.hourlyRate
-      }))
+        trainerRate: trainer.hourlyRate,
+      })),
     ),
-    ...mockClubAthletes.map(athlete => ({ 
-      ...athlete, 
-      trainer: "Klub", 
+    ...mockClubAthletes.map((athlete) => ({
+      ...athlete,
+      trainer: 'Klub',
       trainerSpecialty: athlete.sport,
-      trainerRate: 50
-    }))
+      trainerRate: 50,
+    })),
   ];
 
-  const filteredAthletes = allAthletes.filter(athlete => {
+  const filteredAthletes = allAthletes.filter((athlete) => {
     const matchesSearch = athlete.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesPayment = paymentFilter === "all" || 
-                          (paymentFilter === "paid" && athlete.paid) ||
-                          (paymentFilter === "unpaid" && !athlete.paid);
+    const matchesPayment =
+      paymentFilter === 'all' ||
+      (paymentFilter === 'paid' && athlete.paid) ||
+      (paymentFilter === 'unpaid' && !athlete.paid);
     return matchesSearch && matchesPayment;
   });
 
   const getPerformanceBadgeVariant = (performance: string) => {
     switch (performance) {
-      case "Bardzo dobra": return "default";
-      case "Dobra": return "secondary";
-      case "Średnia": return "outline";
-      default: return "outline";
+      case 'Bardzo dobra':
+        return 'default';
+      case 'Dobra':
+        return 'secondary';
+      case 'Średnia':
+        return 'outline';
+      default:
+        return 'outline';
     }
   };
 
   const getPaymentStatus = (paid: boolean) => ({
-    variant: paid ? "default" : "destructive",
-    text: paid ? "Opłacone" : "Zaległości"
+    variant: paid ? 'default' : 'destructive',
+    text: paid ? 'Opłacone' : 'Zaległości',
   });
 
   // Statistics calculations
-  const totalUnpaidAthletes = allAthletes.filter(a => !a.paid).length;
+  const totalUnpaidAthletes = allAthletes.filter((a) => !a.paid).length;
   const totalMonthlyRevenue = allAthletes.reduce((sum, a) => sum + (a.monthlyPayment || 0), 0);
-  const totalPaidRevenue = allAthletes.filter(a => a.paid).reduce((sum, a) => sum + (a.monthlyPayment || 0), 0);
+  const totalPaidRevenue = allAthletes
+    .filter((a) => a.paid)
+    .reduce((sum, a) => sum + (a.monthlyPayment || 0), 0);
 
   return (
     <div className="p-4 lg:p-6 space-y-6">
@@ -320,15 +334,21 @@ export default function ClubDashboard() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="space-y-1">
               <p className="text-sm text-muted-foreground">Łączne przychody</p>
-              <p className="text-2xl font-bold text-primary">{totalMonthlyRevenue.toLocaleString()} PLN</p>
+              <p className="text-2xl font-bold text-primary">
+                {totalMonthlyRevenue.toLocaleString()} PLN
+              </p>
             </div>
             <div className="space-y-1">
               <p className="text-sm text-muted-foreground">Otrzymane płatności</p>
-              <p className="text-2xl font-bold text-green-600">{totalPaidRevenue.toLocaleString()} PLN</p>
+              <p className="text-2xl font-bold text-green-600">
+                {totalPaidRevenue.toLocaleString()} PLN
+              </p>
             </div>
             <div className="space-y-1">
               <p className="text-sm text-muted-foreground">Zaległości</p>
-              <p className="text-2xl font-bold text-destructive">{(totalMonthlyRevenue - totalPaidRevenue).toLocaleString()} PLN</p>
+              <p className="text-2xl font-bold text-destructive">
+                {(totalMonthlyRevenue - totalPaidRevenue).toLocaleString()} PLN
+              </p>
             </div>
             <div className="space-y-1">
               <p className="text-sm text-muted-foreground">Osoby z zaległościami</p>
@@ -383,11 +403,14 @@ export default function ClubDashboard() {
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-semibold">Trenerzy ({filteredTrainers.length})</h2>
           </div>
-          
+
           <div className="space-y-4">
             {filteredTrainers.map((trainer) => (
-              <Card key={trainer.id} className="border-primary/20 hover:shadow-lg transition-shadow">
-                <Collapsible 
+              <Card
+                key={trainer.id}
+                className="border-primary/20 hover:shadow-lg transition-shadow"
+              >
+                <Collapsible
                   open={expandedTrainers.includes(trainer.id)}
                   onOpenChange={() => toggleTrainer(trainer.id)}
                 >
@@ -397,7 +420,12 @@ export default function ClubDashboard() {
                         <div className="flex items-center space-x-4">
                           <Avatar className="h-12 w-12">
                             <AvatarImage src={trainer.avatar} alt={trainer.name} />
-                            <AvatarFallback>{trainer.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                            <AvatarFallback>
+                              {trainer.name
+                                .split(' ')
+                                .map((n) => n[0])
+                                .join('')}
+                            </AvatarFallback>
                           </Avatar>
                           <div className="flex-1">
                             <CardTitle className="text-lg">{trainer.name}</CardTitle>
@@ -416,13 +444,18 @@ export default function ClubDashboard() {
                         </div>
                         <div className="flex items-center space-x-4">
                           <div className="text-right hidden sm:block">
-                            <div className="text-sm font-medium">{trainer.athletes.length} podopiecznych</div>
-                            <div className="text-xs text-muted-foreground">{trainer.monthlyEarnings} PLN/miesiąc</div>
+                            <div className="text-sm font-medium">
+                              {trainer.athletes.length} podopiecznych
+                            </div>
+                            <div className="text-xs text-muted-foreground">
+                              {trainer.monthlyEarnings} PLN/miesiąc
+                            </div>
                           </div>
-                          {expandedTrainers.includes(trainer.id) ? 
-                            <ChevronDown className="h-5 w-5" /> : 
+                          {expandedTrainers.includes(trainer.id) ? (
+                            <ChevronDown className="h-5 w-5" />
+                          ) : (
                             <ChevronRight className="h-5 w-5" />
-                          }
+                          )}
                         </div>
                       </div>
                     </CardHeader>
@@ -456,19 +489,25 @@ export default function ClubDashboard() {
                             </div>
                             <div>
                               <div className="font-medium">{trainer.monthlyEarnings} PLN</div>
-                              <div className="text-xs text-muted-foreground">Miesięczny przychód</div>
+                              <div className="text-xs text-muted-foreground">
+                                Miesięczny przychód
+                              </div>
                             </div>
                           </div>
                         </div>
 
                         {/* Training Plans */}
                         <div className="space-y-2">
-                          <h4 className="font-medium text-sm text-muted-foreground">PLANY TRENINGOWE</h4>
+                          <h4 className="font-medium text-sm text-muted-foreground">
+                            PLANY TRENINGOWE
+                          </h4>
                           <div className="space-y-1">
                             {trainer.trainingPlans?.map((plan) => (
                               <div key={plan.id} className="text-sm p-2 bg-accent/30 rounded">
                                 <div className="font-medium">{plan.name}</div>
-                                <div className="text-xs text-muted-foreground">{plan.athletes} sportowców</div>
+                                <div className="text-xs text-muted-foreground">
+                                  {plan.athletes} sportowców
+                                </div>
                               </div>
                             ))}
                           </div>
@@ -476,13 +515,17 @@ export default function ClubDashboard() {
 
                         {/* Athletes Table */}
                         <div className="col-span-4">
-                          <h4 className="font-medium text-sm text-muted-foreground mb-3">PODOPIECZNI</h4>
+                          <h4 className="font-medium text-sm text-muted-foreground mb-3">
+                            PODOPIECZNI
+                          </h4>
                           <div className="space-y-2">
                             {trainer.athletes.map((athlete) => (
-                              <div 
-                                key={athlete.id} 
+                              <div
+                                key={athlete.id}
                                 className="p-3 border border-border rounded-lg hover:bg-accent/50 cursor-pointer transition-colors"
-                                onClick={() => window.location.href = `/athlete/${athlete.id}/details`}
+                                onClick={() =>
+                                  (window.location.href = `/athlete/${athlete.id}/details`)
+                                }
                               >
                                 <div className="flex items-center justify-between">
                                   <div className="flex-1 grid grid-cols-4 gap-4">
@@ -493,20 +536,26 @@ export default function ClubDashboard() {
                                       </div>
                                     </div>
                                     <div className="text-center">
-                                      <div className="font-medium">{athlete.monthlyPayment} PLN</div>
+                                      <div className="font-medium">
+                                        {athlete.monthlyPayment} PLN
+                                      </div>
                                       <div className="text-xs text-muted-foreground">Opłata</div>
                                     </div>
                                     <div className="text-center">
-                                      <Badge 
-                                        variant={getPerformanceBadgeVariant(athlete.performance)} 
+                                      <Badge
+                                        variant={getPerformanceBadgeVariant(athlete.performance)}
                                         className="text-xs"
                                       >
                                         {athlete.performance}
                                       </Badge>
                                     </div>
                                     <div className="text-right">
-                                      <Badge 
-                                        variant={getPaymentStatus(athlete.paid).variant as "default" | "destructive"}
+                                      <Badge
+                                        variant={
+                                          getPaymentStatus(athlete.paid).variant as
+                                            | 'default'
+                                            | 'destructive'
+                                        }
                                         className="text-xs"
                                       >
                                         {getPaymentStatus(athlete.paid).text}
@@ -532,10 +581,13 @@ export default function ClubDashboard() {
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-semibold">Wszyscy Sportowcy ({filteredAthletes.length})</h2>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredAthletes.map((athlete) => (
-              <Card key={`${athlete.id}-${athlete.trainer}`} className="border-primary/20 hover:shadow-lg transition-shadow">
+              <Card
+                key={`${athlete.id}-${athlete.trainer}`}
+                className="border-primary/20 hover:shadow-lg transition-shadow"
+              >
                 <CardHeader className="pb-3">
                   <div className="flex justify-between items-start">
                     <div className="flex-1">
@@ -547,8 +599,8 @@ export default function ClubDashboard() {
                         </div>
                       </CardDescription>
                     </div>
-                    <Badge 
-                      variant={getPaymentStatus(athlete.paid).variant as "default" | "destructive"}
+                    <Badge
+                      variant={getPaymentStatus(athlete.paid).variant as 'default' | 'destructive'}
                       className="ml-2"
                     >
                       {getPaymentStatus(athlete.paid).text}
@@ -565,12 +617,17 @@ export default function ClubDashboard() {
                       <div className="font-medium">{athlete.monthlyPayment || 0} PLN</div>
                     </div>
                     {'performance' in athlete && (
-                      <Badge variant={getPerformanceBadgeVariant(athlete.performance)} className="text-xs">
+                      <Badge
+                        variant={getPerformanceBadgeVariant(athlete.performance)}
+                        className="text-xs"
+                      >
                         {athlete.performance}
                       </Badge>
                     )}
                     {'level' in athlete && (
-                      <Badge variant="secondary" className="text-xs">{athlete.level}</Badge>
+                      <Badge variant="secondary" className="text-xs">
+                        {athlete.level}
+                      </Badge>
                     )}
                   </div>
                 </CardContent>
@@ -582,12 +639,17 @@ export default function ClubDashboard() {
         {/* Club Athletes Tab */}
         <TabsContent value="club-athletes" className="space-y-4">
           <div className="flex justify-between items-center">
-            <h2 className="text-xl font-semibold">Sportowcy prowadzeni przez klub ({mockClubAthletes.length})</h2>
+            <h2 className="text-xl font-semibold">
+              Sportowcy prowadzeni przez klub ({mockClubAthletes.length})
+            </h2>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {mockClubAthletes.map((athlete) => (
-              <Card key={athlete.id} className="border-primary/20 hover:shadow-lg transition-shadow">
+              <Card
+                key={athlete.id}
+                className="border-primary/20 hover:shadow-lg transition-shadow"
+              >
                 <CardHeader className="pb-3">
                   <div className="flex justify-between items-start">
                     <div className="flex-1">
@@ -599,8 +661,8 @@ export default function ClubDashboard() {
                         </div>
                       </CardDescription>
                     </div>
-                    <Badge 
-                      variant={getPaymentStatus(athlete.paid).variant as "default" | "destructive"}
+                    <Badge
+                      variant={getPaymentStatus(athlete.paid).variant as 'default' | 'destructive'}
                       className="ml-2"
                     >
                       {getPaymentStatus(athlete.paid).text}
@@ -646,8 +708,12 @@ export default function ClubDashboard() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-green-600">{totalPaidRevenue.toLocaleString()} PLN</div>
-                <div className="text-sm text-green-700">{allAthletes.filter(a => a.paid).length} sportowców</div>
+                <div className="text-2xl font-bold text-green-600">
+                  {totalPaidRevenue.toLocaleString()} PLN
+                </div>
+                <div className="text-sm text-green-700">
+                  {allAthletes.filter((a) => a.paid).length} sportowców
+                </div>
               </CardContent>
             </Card>
 
@@ -659,7 +725,9 @@ export default function ClubDashboard() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-red-600">{(totalMonthlyRevenue - totalPaidRevenue).toLocaleString()} PLN</div>
+                <div className="text-2xl font-bold text-red-600">
+                  {(totalMonthlyRevenue - totalPaidRevenue).toLocaleString()} PLN
+                </div>
                 <div className="text-sm text-red-700">{totalUnpaidAthletes} sportowców</div>
               </CardContent>
             </Card>
@@ -672,7 +740,9 @@ export default function ClubDashboard() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-blue-600">{totalMonthlyRevenue.toLocaleString()} PLN</div>
+                <div className="text-2xl font-bold text-blue-600">
+                  {totalMonthlyRevenue.toLocaleString()} PLN
+                </div>
                 <div className="text-sm text-blue-700">{allAthletes.length} sportowców</div>
               </CardContent>
             </Card>
@@ -686,12 +756,16 @@ export default function ClubDashboard() {
             <CardContent>
               <div className="space-y-3">
                 {allAthletes.map((athlete) => (
-                  <div key={`payment-${athlete.id}-${athlete.trainer}`} className="flex items-center justify-between p-3 border rounded-lg hover:bg-accent/30 transition-colors">
+                  <div
+                    key={`payment-${athlete.id}-${athlete.trainer}`}
+                    className="flex items-center justify-between p-3 border rounded-lg hover:bg-accent/30 transition-colors"
+                  >
                     <div className="flex items-center space-x-3">
                       <div className="flex-1">
                         <div className="font-medium">{athlete.name}</div>
                         <div className="text-sm text-muted-foreground">
-                          {athlete.trainer} • {athlete.trainerSpecialty} • {athlete.hoursThisMonth || 0}h
+                          {athlete.trainer} • {athlete.trainerSpecialty} •{' '}
+                          {athlete.hoursThisMonth || 0}h
                         </div>
                       </div>
                     </div>
@@ -699,17 +773,19 @@ export default function ClubDashboard() {
                       <div className="text-right">
                         <div className="font-medium">{athlete.monthlyPayment || 0} PLN</div>
                         <div className="text-sm text-muted-foreground">
-                          {(athlete.trainerRate || 50)} PLN/h
+                          {athlete.trainerRate || 50} PLN/h
                         </div>
                       </div>
-                      <Badge 
-                        variant={getPaymentStatus(athlete.paid).variant as "default" | "destructive"}
+                      <Badge
+                        variant={
+                          getPaymentStatus(athlete.paid).variant as 'default' | 'destructive'
+                        }
                         className="w-20 justify-center"
                       >
                         {getPaymentStatus(athlete.paid).text}
                       </Badge>
                       <Button variant="outline" size="sm">
-                        {athlete.paid ? "Szczegóły" : "Oznacz jako opłacone"}
+                        {athlete.paid ? 'Szczegóły' : 'Oznacz jako opłacone'}
                       </Button>
                     </div>
                   </div>

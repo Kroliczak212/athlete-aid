@@ -1,5 +1,5 @@
 export class ApiError<T = unknown> extends Error {
-  name = "ApiError";
+  name = 'ApiError';
   status: number | null;
   code?: string;
   details?: T;
@@ -18,7 +18,7 @@ export class ApiError<T = unknown> extends Error {
       isTimeout?: boolean;
       isAbort?: boolean;
       retriable?: boolean;
-    } = {}
+    } = {},
   ) {
     super(message);
     this.status = opts.status ?? null;
@@ -31,20 +31,21 @@ export class ApiError<T = unknown> extends Error {
   }
 
   static async fromResponse(res: Response): Promise<ApiError> {
-    let payload: any = null;
+    type ErrorPayload = { message?: string; error?: string; [k: string]: unknown };
+    const isRecord = (v: unknown): v is Record<string, unknown> =>
+      typeof v === 'object' && v !== null;
+
+    let payload: unknown = null;
     try {
-      const ct = res.headers.get("content-type") || "";
-      payload = ct.includes("application/json")
-        ? await res.json()
-        : await res.text();
+      const ct = res.headers.get('content-type') || '';
+      payload = ct.includes('application/json') ? await res.json() : await res.text();
     } catch {
       /* ignore */
     }
 
-    const msg =
-      (payload && (payload.message || payload.error)) ||
-      res.statusText ||
-      "Request failed";
+    const obj = isRecord(payload) ? (payload as ErrorPayload) : undefined;
+
+    const msg = obj?.message ?? obj?.error ?? res.statusText ?? 'Request failed';
 
     return new ApiError(msg, {
       status: res.status,

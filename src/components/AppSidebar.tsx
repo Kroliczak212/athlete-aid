@@ -1,12 +1,5 @@
-import {
-  Users,
-  Calendar,
-  BarChart3,
-  Brain,
-  Target,
-  Building2,
-} from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { Users, Calendar, BarChart3, Brain, Target, Building2 } from 'lucide-react';
+import { NavLink } from 'react-router-dom';
 
 import {
   Sidebar,
@@ -18,20 +11,20 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar";
+} from '@/components/ui/sidebar';
 
 const navigationItems = [
-  { title: "Dashboard trenera", url: "/", icon: Users },
-  { title: "Panel Klubu", url: "/club", icon: Building2 },
-  { title: "Panel Sportowca", url: "/athlete-dashboard", icon: Target },
-  { title: "Plany Treningowe trenera", url: "/training", icon: Calendar },
-  { title: "Analizator AI", url: "/analyzer", icon: BarChart3 },
-  { title: "Analiza Ruchu", url: "/motion", icon: Brain },
+  { title: 'Dashboard trenera', url: '/', icon: Users },
+  { title: 'Panel Klubu', url: '/club', icon: Building2 },
+  { title: 'Panel Sportowca', url: '/athlete-dashboard', icon: Target },
+  { title: 'Plany Treningowe trenera', url: '/training', icon: Calendar },
+  { title: 'Analizator AI', url: '/analyzer', icon: BarChart3 },
+  { title: 'Analiza Ruchu', url: '/motion', icon: Brain },
 ];
 
 export function AppSidebar() {
   const { state } = useSidebar();
-  const isCollapsed = state === "collapsed";
+  const isCollapsed = state === 'collapsed';
 
   return (
     <Sidebar
@@ -40,10 +33,8 @@ export function AppSidebar() {
     >
       <SidebarContent>
         <div className="p-4 border-b border-border">
-          <h2
-            className={`font-bold text-lg ${isCollapsed ? "text-center" : ""}`}
-          >
-            {isCollapsed ? "SA" : "SportApp"}
+          <h2 className={`font-bold text-lg ${isCollapsed ? 'text-center' : ''}`}>
+            {isCollapsed ? 'SA' : 'SportApp'}
           </h2>
         </div>
 
@@ -62,8 +53,8 @@ export function AppSidebar() {
                       className={({ isActive }) =>
                         `flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 text-sidebar-foreground ${
                           isActive
-                            ? "bg-primary text-primary-foreground shadow-lg font-medium"
-                            : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                            ? 'bg-primary text-primary-foreground shadow-lg font-medium'
+                            : 'hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
                         }`
                       }
                     >

@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { IdSchema, TimestampSchema } from "./common.schema";
+import { z } from 'zod';
+import { IdSchema, TimestampSchema } from './common.schema';
 
 export const UserSchema = z.object({
   id: IdSchema,

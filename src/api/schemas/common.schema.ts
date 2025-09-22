@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const IdSchema = z.union([z.string().min(1), z.number().int()]);
 export const TimestampSchema = z.string().datetime({ offset: true });

@@ -1,43 +1,43 @@
-import { useParams, Link } from "react-router-dom";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { 
-  ArrowLeft, 
-  Mail, 
-  Phone, 
-  Calendar, 
+import { useParams, Link } from 'react-router-dom';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import {
+  ArrowLeft,
+  Mail,
+  Phone,
+  Calendar,
   Target,
   Activity,
   Award,
   TrendingUp,
   Heart,
   Zap,
-  Edit
-} from "lucide-react";
+  Edit,
+} from 'lucide-react';
 
 const mockAthleteData = {
-  id: "1",
-  name: "Anna Kowalska",
-  email: "anna.kowalska@email.com",
-  phone: "+48 123 456 789",
-  sport: "Pływanie",
-  joinDate: "15.03.2024",
+  id: '1',
+  name: 'Anna Kowalska',
+  email: 'anna.kowalska@email.com',
+  phone: '+48 123 456 789',
+  sport: 'Pływanie',
+  joinDate: '15.03.2024',
   age: 24,
-  emergencyContact: "Maria Kowalska (+48 987 654 321)",
-  paymentStatus: "paid",
-  nextPayment: "15.10.2024",
-  monthlyFee: "200 zł",
-  currentPlan: "Plan Zaawansowany",
+  emergencyContact: 'Maria Kowalska (+48 987 654 321)',
+  paymentStatus: 'paid',
+  nextPayment: '15.10.2024',
+  monthlyFee: '200 zł',
+  currentPlan: 'Plan Zaawansowany',
   activePlans: [
     {
-      name: "Plan Zaawansowany",
+      name: 'Plan Zaawansowany',
       progress: 75,
-      nextSession: "15.09.2024 18:00",
-      type: "Technika"
-    }
+      nextSession: '15.09.2024 18:00',
+      type: 'Technika',
+    },
   ],
   stats: {
     totalSessions: 45,
@@ -46,16 +46,31 @@ const mockAthleteData = {
     avgHeartRate: 152,
     maxHeartRate: 185,
     personalBests: [
-      { distance: "50m kraul", time: "26.45s", date: "10.09.2024" },
-      { distance: "100m kraul", time: "58.23s", date: "05.09.2024" },
-      { distance: "200m kraul", time: "2:05.67", date: "01.09.2024" }
-    ]
+      { distance: '50m kraul', time: '26.45s', date: '10.09.2024' },
+      { distance: '100m kraul', time: '58.23s', date: '05.09.2024' },
+      { distance: '200m kraul', time: '2:05.67', date: '01.09.2024' },
+    ],
   },
   recentActivity: [
-    { date: "12.09.2024", activity: "Sesja techniczna", duration: "90 min", notes: "Dobra praca nad startem" },
-    { date: "10.09.2024", activity: "Trening wytrzymałościowy", duration: "120 min", notes: "Nowy rekord osobisty na 50m" },
-    { date: "08.09.2024", activity: "Sesja sprint", duration: "75 min", notes: "Praca nad techniką obrotu" }
-  ]
+    {
+      date: '12.09.2024',
+      activity: 'Sesja techniczna',
+      duration: '90 min',
+      notes: 'Dobra praca nad startem',
+    },
+    {
+      date: '10.09.2024',
+      activity: 'Trening wytrzymałościowy',
+      duration: '120 min',
+      notes: 'Nowy rekord osobisty na 50m',
+    },
+    {
+      date: '08.09.2024',
+      activity: 'Sesja sprint',
+      duration: '75 min',
+      notes: 'Praca nad techniką obrotu',
+    },
+  ],
 };
 
 export default function AthleteProfile() {
@@ -88,7 +103,10 @@ export default function AthleteProfile() {
             <div className="flex items-center gap-4">
               <Avatar className="h-16 w-16">
                 <AvatarFallback className="bg-primary text-primary-foreground text-lg">
-                  {athlete.name.split(' ').map(n => n[0]).join('')}
+                  {athlete.name
+                    .split(' ')
+                    .map((n) => n[0])
+                    .join('')}
                 </AvatarFallback>
               </Avatar>
               <div className="flex-1">
@@ -170,7 +188,11 @@ export default function AthleteProfile() {
                   </p>
                 </div>
                 <Link to={`/training/plan/1`}>
-                  <Button variant="outline" size="sm" className="border-border hover:bg-sport-accent">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="border-border hover:bg-sport-accent"
+                  >
                     Zobacz szczegóły
                   </Button>
                 </Link>
@@ -256,7 +278,10 @@ export default function AthleteProfile() {
           <CardContent>
             <div className="space-y-3">
               {athlete.stats.personalBests.map((record, index) => (
-                <div key={index} className="flex items-center justify-between p-3 bg-sport-accent rounded-lg">
+                <div
+                  key={index}
+                  className="flex items-center justify-between p-3 bg-sport-accent rounded-lg"
+                >
                   <div>
                     <p className="font-medium">{record.distance}</p>
                     <p className="text-sm text-muted-foreground">{record.date}</p>
@@ -283,9 +308,7 @@ export default function AthleteProfile() {
                     <p className="text-sm text-muted-foreground">{activity.date}</p>
                   </div>
                   <p className="text-sm text-muted-foreground mb-1">{activity.duration}</p>
-                  {activity.notes && (
-                    <p className="text-sm">{activity.notes}</p>
-                  )}
+                  {activity.notes && <p className="text-sm">{activity.notes}</p>}
                 </div>
               ))}
             </div>

@@ -1,13 +1,26 @@
-import { useState } from "react";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import { Plus, X, Clock, Target } from "lucide-react";
+import { useState } from 'react';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
+import { Plus, X, Clock, Target } from 'lucide-react';
 
 interface Exercise {
   id: string;
@@ -26,14 +39,14 @@ interface TrainingInputDialogProps {
 export function TrainingInputDialog({ children, athleteName }: TrainingInputDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [exercises, setExercises] = useState<Exercise[]>([]);
-  const [currentExercise, setCurrentExercise] = useState("");
-  const [currentSets, setCurrentSets] = useState("");
-  const [currentDuration, setCurrentDuration] = useState("");
-  const [currentDescription, setCurrentDescription] = useState("");
-  const [trainingType, setTrainingType] = useState("");
-  const [trainingDate, setTrainingDate] = useState("");
-  const [trainingTime, setTrainingTime] = useState("");
-  const [notes, setNotes] = useState("");
+  const [currentExercise, setCurrentExercise] = useState('');
+  const [currentSets, setCurrentSets] = useState('');
+  const [currentDuration, setCurrentDuration] = useState('');
+  const [currentDescription, setCurrentDescription] = useState('');
+  const [trainingType, setTrainingType] = useState('');
+  const [trainingDate, setTrainingDate] = useState('');
+  const [trainingTime, setTrainingTime] = useState('');
+  const [notes, setNotes] = useState('');
 
   const addExercise = () => {
     if (currentExercise.trim()) {
@@ -42,49 +55,49 @@ export function TrainingInputDialog({ children, athleteName }: TrainingInputDial
         name: currentExercise,
         sets: currentSets,
         duration: currentDuration,
-        description: currentDescription
+        description: currentDescription,
       };
       setExercises([...exercises, newExercise]);
-      setCurrentExercise("");
-      setCurrentSets("");
-      setCurrentDuration("");
-      setCurrentDescription("");
+      setCurrentExercise('');
+      setCurrentSets('');
+      setCurrentDuration('');
+      setCurrentDescription('');
     }
   };
 
   const removeExercise = (id: string) => {
-    setExercises(exercises.filter(ex => ex.id !== id));
+    setExercises(exercises.filter((ex) => ex.id !== id));
   };
 
   const handleSave = () => {
     // Here you would save the training plan
-    console.log("Saving training:", {
+    console.log('Saving training:', {
       athleteName,
       trainingType,
       trainingDate,
       trainingTime,
       exercises,
-      notes
+      notes,
     });
     setIsOpen(false);
     // Reset form
     setExercises([]);
-    setTrainingType("");
-    setTrainingDate("");
-    setTrainingTime("");
-    setNotes("");
+    setTrainingType('');
+    setTrainingDate('');
+    setTrainingTime('');
+    setNotes('');
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        {children}
-      </DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Dodaj Trening</DialogTitle>
           <DialogDescription>
-            {athleteName ? `Utwórz nowy trening dla: ${athleteName}` : "Utwórz nowy plan treningowy"}
+            {athleteName
+              ? `Utwórz nowy trening dla: ${athleteName}`
+              : 'Utwórz nowy plan treningowy'}
           </DialogDescription>
         </DialogHeader>
 
@@ -131,7 +144,7 @@ export function TrainingInputDialog({ children, athleteName }: TrainingInputDial
           {/* Exercise Input */}
           <div className="space-y-4">
             <h4 className="font-medium">Ćwiczenia</h4>
-            
+
             <Card className="p-4">
               <div className="space-y-3">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -181,7 +194,9 @@ export function TrainingInputDialog({ children, athleteName }: TrainingInputDial
                       <div className="flex items-center justify-between">
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-1">
-                            <span className="font-medium">{index + 1}. {exercise.name}</span>
+                            <span className="font-medium">
+                              {index + 1}. {exercise.name}
+                            </span>
                           </div>
                           <div className="flex gap-3 text-sm text-muted-foreground">
                             {exercise.sets && (
@@ -236,7 +251,7 @@ export function TrainingInputDialog({ children, athleteName }: TrainingInputDial
             <Button variant="outline" onClick={() => setIsOpen(false)}>
               Anuluj
             </Button>
-            <Button 
+            <Button
               onClick={handleSave}
               className="bg-primary hover:bg-sport-hover text-primary-foreground"
             >

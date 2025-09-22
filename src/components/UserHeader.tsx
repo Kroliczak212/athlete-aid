@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { useState } from 'react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,8 +8,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { LogOut, Settings, User, Bell } from "lucide-react";
+} from '@/components/ui/dropdown-menu';
+import { LogOut, Settings, User, Bell } from 'lucide-react';
 
 interface UserHeaderProps {
   className?: string;
@@ -17,18 +17,18 @@ interface UserHeaderProps {
 
 export function UserHeader({ className }: UserHeaderProps) {
   const [notifications] = useState(3); // Mock notification count
-  
+
   // Mock user data - in real app this would come from auth context
   const currentUser = {
-    name: "Jan Kowalski",
-    email: "jan.kowalski@sportklub.pl",
-    role: "Trener",
-    avatar: "/placeholder.svg"
+    name: 'Jan Kowalski',
+    email: 'jan.kowalski@sportklub.pl',
+    role: 'Trener',
+    avatar: '/placeholder.svg',
   };
 
   const handleLogout = () => {
     // In real app, this would handle actual logout
-    console.log("Logging out...");
+    console.log('Logging out...');
   };
 
   return (
@@ -54,7 +54,12 @@ export function UserHeader({ className }: UserHeaderProps) {
               </div>
               <Avatar className="h-8 w-8">
                 <AvatarImage src={currentUser.avatar} alt={currentUser.name} />
-                <AvatarFallback>{currentUser.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                <AvatarFallback>
+                  {currentUser.name
+                    .split(' ')
+                    .map((n) => n[0])
+                    .join('')}
+                </AvatarFallback>
               </Avatar>
             </div>
           </Button>
@@ -77,7 +82,10 @@ export function UserHeader({ className }: UserHeaderProps) {
             <span>Ustawienia</span>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={handleLogout} className="text-destructive focus:text-destructive">
+          <DropdownMenuItem
+            onClick={handleLogout}
+            className="text-destructive focus:text-destructive"
+          >
             <LogOut className="mr-2 h-4 w-4" />
             <span>Wyloguj</span>
           </DropdownMenuItem>

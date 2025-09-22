@@ -1,4 +1,4 @@
-import { apiClient } from "../client/http";
+import { apiClient } from '../client/http';
 import {
   LoginRequest,
   LoginRequestSchema,
@@ -8,24 +8,24 @@ import {
   RefreshResponseSchema,
   User,
   UserSchema,
-} from "../schemas/auth.schema";
+} from '../schemas/auth.schema';
 
 export const AuthAPI = {
   login: (payload: LoginRequest) =>
     apiClient.post<LoginResponse>(
-      "/auth/login",
+      '/auth/login',
       { body: LoginRequestSchema.parse(payload) },
-      LoginResponseSchema
+      LoginResponseSchema,
     ),
 
-  me: () => apiClient.get<User>("/auth/me", undefined, UserSchema),
+  me: () => apiClient.get<User>('/auth/me', undefined, UserSchema),
 
   refresh: (refreshToken: string) =>
     apiClient.post<RefreshResponse>(
-      "/auth/refresh",
+      '/auth/refresh',
       { body: { refreshToken } },
-      RefreshResponseSchema
+      RefreshResponseSchema,
     ),
 
-  logout: () => apiClient.post<void>("/auth/logout"),
+  logout: () => apiClient.post<void>('/auth/logout'),
 };

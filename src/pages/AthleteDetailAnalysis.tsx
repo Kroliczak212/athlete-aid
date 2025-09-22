@@ -1,16 +1,16 @@
-import { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { TrainerFeedbackDialog } from "@/components/TrainerFeedbackDialog";
-import { 
-  Heart, 
-  Activity, 
-  Timer, 
-  TrendingUp, 
+import { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { TrainerFeedbackDialog } from '@/components/TrainerFeedbackDialog';
+import {
+  Heart,
+  Activity,
+  Timer,
+  TrendingUp,
   Zap,
   Brain,
   ArrowLeft,
@@ -20,73 +20,73 @@ import {
   AlertCircle,
   CheckCircle,
   MessageSquare,
-  BarChart3
-} from "lucide-react";
+  BarChart3,
+} from 'lucide-react';
 
 // Mock data for detailed athlete analysis
 const mockAthleteAnalysis = {
-  id: "1",
-  name: "Anna Kowalska",
-  sport: "Pływanie",
-  avatar: "AK",
+  id: '1',
+  name: 'Anna Kowalska',
+  sport: 'Pływanie',
+  avatar: 'AK',
   recentMetrics: {
     avgHeartRate: 142,
     maxHeartRate: 185,
     restingHeartRate: 52,
     vo2Max: 58.2,
-    avgPace: "1:25/100m",
-    weeklyVolume: "12.5 km",
-    trainingLoad: 420
+    avgPace: '1:25/100m',
+    weeklyVolume: '12.5 km',
+    trainingLoad: 420,
   },
   weeklyProgress: {
     completed: 4,
     planned: 5,
-    percentage: 80
+    percentage: 80,
   },
   aiInsights: [
     {
-      type: "success",
-      title: "Poprawa wydolności",
-      description: "VO2 Max wzrósł o 3.2% w ostatnim miesiącu",
+      type: 'success',
+      title: 'Poprawa wydolności',
+      description: 'VO2 Max wzrósł o 3.2% w ostatnim miesiącu',
       confidence: 94,
-      recommendation: "Kontynuuj obecny plan wytrzymałościowy"
+      recommendation: 'Kontynuuj obecny plan wytrzymałościowy',
     },
     {
-      type: "warning", 
-      title: "Wzrost tętna spoczynkowego",
-      description: "Tętno spoczynkowe wzrosło z 48 do 52 bpm",
+      type: 'warning',
+      title: 'Wzrost tętna spoczynkowego',
+      description: 'Tętno spoczynkowe wzrosło z 48 do 52 bpm',
       confidence: 87,
-      recommendation: "Rozważ dodatkowy dzień regeneracji"
+      recommendation: 'Rozważ dodatkowy dzień regeneracji',
     },
     {
-      type: "info",
-      title: "Stabilne tempo",
-      description: "Konsystentne utrzymywanie tempa w strefie aerobowej",
+      type: 'info',
+      title: 'Stabilne tempo',
+      description: 'Konsystentne utrzymywanie tempa w strefie aerobowej',
       confidence: 91,
-      recommendation: "Wprowadź więcej pracy w strefie progowej"
-    }
+      recommendation: 'Wprowadź więcej pracy w strefie progowej',
+    },
   ],
   weeklyStats: [
-    { day: "Pon", planned: true, completed: true, intensity: 7, duration: 90 },
-    { day: "Wto", planned: true, completed: true, intensity: 5, duration: 60 },
-    { day: "Śr", planned: true, completed: true, intensity: 8, duration: 120 },
-    { day: "Czw", planned: true, completed: false, intensity: 6, duration: 75 },
-    { day: "Pią", planned: true, completed: true, intensity: 9, duration: 45 },
-    { day: "Sob", planned: false, completed: false, intensity: 0, duration: 0 },
-    { day: "Nie", planned: true, completed: false, intensity: 4, duration: 90 }
+    { day: 'Pon', planned: true, completed: true, intensity: 7, duration: 90 },
+    { day: 'Wto', planned: true, completed: true, intensity: 5, duration: 60 },
+    { day: 'Śr', planned: true, completed: true, intensity: 8, duration: 120 },
+    { day: 'Czw', planned: true, completed: false, intensity: 6, duration: 75 },
+    { day: 'Pią', planned: true, completed: true, intensity: 9, duration: 45 },
+    { day: 'Sob', planned: false, completed: false, intensity: 0, duration: 0 },
+    { day: 'Nie', planned: true, completed: false, intensity: 4, duration: 90 },
   ],
   monthlyTrends: {
     performance: [85, 87, 89, 91, 88, 92, 94, 96],
     volume: [10, 11, 12, 13, 12, 14, 13, 12.5],
-    intensity: [6.5, 6.8, 7.0, 7.2, 6.9, 7.4, 7.6, 7.3]
-  }
+    intensity: [6.5, 6.8, 7.0, 7.2, 6.9, 7.4, 7.6, 7.3],
+  },
 };
 
 export default function AthleteDetailAnalysis() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [selectedTab, setSelectedTab] = useState("overview");
-  
+  const [selectedTab, setSelectedTab] = useState('overview');
+
   const athlete = mockAthleteAnalysis;
 
   return (
@@ -94,10 +94,10 @@ export default function AthleteDetailAnalysis() {
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-4">
         <div className="flex items-center gap-4">
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             size="sm"
-            onClick={() => navigate("/analyzer")}
+            onClick={() => navigate('/analyzer')}
             className="border-border"
           >
             <ArrowLeft className="h-4 w-4" />
@@ -108,9 +108,7 @@ export default function AthleteDetailAnalysis() {
                 {athlete.avatar}
               </div>
               <div>
-                <h1 className="text-2xl lg:text-3xl font-bold tracking-tight">
-                  {athlete.name}
-                </h1>
+                <h1 className="text-2xl lg:text-3xl font-bold tracking-tight">{athlete.name}</h1>
                 <p className="text-muted-foreground">{athlete.sport} • Analiza szczegółowa</p>
               </div>
             </div>
@@ -179,16 +177,28 @@ export default function AthleteDetailAnalysis() {
 
       <Tabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-4">
         <TabsList className="grid w-full grid-cols-4 bg-sport-accent">
-          <TabsTrigger value="overview" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+          <TabsTrigger
+            value="overview"
+            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+          >
             Przegląd
           </TabsTrigger>
-          <TabsTrigger value="analysis" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+          <TabsTrigger
+            value="analysis"
+            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+          >
             Analiza AI
           </TabsTrigger>
-          <TabsTrigger value="progress" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+          <TabsTrigger
+            value="progress"
+            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+          >
             Postępy
           </TabsTrigger>
-          <TabsTrigger value="trainings" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+          <TabsTrigger
+            value="trainings"
+            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+          >
             Treningi
           </TabsTrigger>
         </TabsList>
@@ -203,7 +213,8 @@ export default function AthleteDetailAnalysis() {
                   Postęp tygodniowy
                 </CardTitle>
                 <CardDescription>
-                  {athlete.weeklyProgress.completed}/{athlete.weeklyProgress.planned} treningów ukończonych
+                  {athlete.weeklyProgress.completed}/{athlete.weeklyProgress.planned} treningów
+                  ukończonych
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -212,14 +223,22 @@ export default function AthleteDetailAnalysis() {
                   {athlete.weeklyStats.map((day, index) => (
                     <div key={index} className="space-y-1">
                       <div className="text-xs font-medium text-muted-foreground">{day.day}</div>
-                      <div className={`w-8 h-8 mx-auto rounded-full flex items-center justify-center text-xs ${
-                        day.completed 
-                          ? 'bg-green-100 text-green-700 border-2 border-green-500' 
-                          : day.planned 
-                            ? 'bg-orange-100 text-orange-700 border-2 border-orange-500'
-                            : 'bg-gray-100 text-gray-400'
-                      }`}>
-                        {day.completed ? <CheckCircle className="h-4 w-4" /> : day.planned ? <AlertCircle className="h-4 w-4" /> : '-'}
+                      <div
+                        className={`w-8 h-8 mx-auto rounded-full flex items-center justify-center text-xs ${
+                          day.completed
+                            ? 'bg-green-100 text-green-700 border-2 border-green-500'
+                            : day.planned
+                              ? 'bg-orange-100 text-orange-700 border-2 border-orange-500'
+                              : 'bg-gray-100 text-gray-400'
+                        }`}
+                      >
+                        {day.completed ? (
+                          <CheckCircle className="h-4 w-4" />
+                        ) : day.planned ? (
+                          <AlertCircle className="h-4 w-4" />
+                        ) : (
+                          '-'
+                        )}
                       </div>
                     </div>
                   ))}
@@ -234,13 +253,17 @@ export default function AthleteDetailAnalysis() {
                   <Zap className="h-5 w-5 text-primary" />
                   Obciążenie treningowe
                 </CardTitle>
-                <CardDescription>Aktualne obciążenie: {athlete.recentMetrics.trainingLoad} TSS</CardDescription>
+                <CardDescription>
+                  Aktualne obciążenie: {athlete.recentMetrics.trainingLoad} TSS
+                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">Tętno spoczynkowe:</span>
-                    <span className="font-medium">{athlete.recentMetrics.restingHeartRate} bpm</span>
+                    <span className="font-medium">
+                      {athlete.recentMetrics.restingHeartRate} bpm
+                    </span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">Maks. tętno:</span>
@@ -271,14 +294,14 @@ export default function AthleteDetailAnalysis() {
             </CardHeader>
             <CardContent className="space-y-4">
               {athlete.aiInsights.map((insight, index) => (
-                <div 
+                <div
                   key={index}
                   className={`p-4 rounded-lg border-l-4 ${
-                    insight.type === 'warning' 
-                      ? 'bg-orange-50 border-l-orange-500 dark:bg-orange-950/20' 
+                    insight.type === 'warning'
+                      ? 'bg-orange-50 border-l-orange-500 dark:bg-orange-950/20'
                       : insight.type === 'success'
-                      ? 'bg-green-50 border-l-green-500 dark:bg-green-950/20'
-                      : 'bg-blue-50 border-l-blue-500 dark:bg-blue-950/20'
+                        ? 'bg-green-50 border-l-green-500 dark:bg-green-950/20'
+                        : 'bg-blue-50 border-l-blue-500 dark:bg-blue-950/20'
                   }`}
                 >
                   <div className="flex items-start justify-between">
@@ -366,25 +389,43 @@ export default function AthleteDetailAnalysis() {
             <CardContent>
               <div className="space-y-3">
                 {[
-                  { date: "16.09", type: "Technika", duration: "90 min", completed: true, id: 1 },
-                  { date: "14.09", type: "Wytrzymałość", duration: "120 min", completed: true, id: 2 },
-                  { date: "12.09", type: "Interwały", duration: "60 min", completed: true, id: 3 },
-                  { date: "10.09", type: "Siła", duration: "75 min", completed: false, id: 4 },
-                  { date: "08.09", type: "Technika", duration: "85 min", completed: true, id: 5 },
-                  { date: "06.09", type: "Wytrzymałość", duration: "110 min", completed: true, id: 6 },
+                  { date: '16.09', type: 'Technika', duration: '90 min', completed: true, id: 1 },
+                  {
+                    date: '14.09',
+                    type: 'Wytrzymałość',
+                    duration: '120 min',
+                    completed: true,
+                    id: 2,
+                  },
+                  { date: '12.09', type: 'Interwały', duration: '60 min', completed: true, id: 3 },
+                  { date: '10.09', type: 'Siła', duration: '75 min', completed: false, id: 4 },
+                  { date: '08.09', type: 'Technika', duration: '85 min', completed: true, id: 5 },
+                  {
+                    date: '06.09',
+                    type: 'Wytrzymałość',
+                    duration: '110 min',
+                    completed: true,
+                    id: 6,
+                  },
                 ].map((training, index) => (
-                  <div 
-                    key={index} 
+                  <div
+                    key={index}
                     className="flex items-center justify-between p-3 bg-sport-accent rounded-lg cursor-pointer hover:bg-accent/80 transition-colors"
-                    onClick={() => training.completed && (window.location.href = `/training/${training.id}`)}
+                    onClick={() =>
+                      training.completed && (window.location.href = `/training/${training.id}`)
+                    }
                   >
                     <div className="flex items-center gap-3">
-                      <div className={`w-4 h-4 rounded-full ${
-                        training.completed ? 'bg-green-500' : 'bg-gray-400'
-                      }`} />
+                      <div
+                        className={`w-4 h-4 rounded-full ${
+                          training.completed ? 'bg-green-500' : 'bg-gray-400'
+                        }`}
+                      />
                       <div>
                         <p className="font-medium">{training.type}</p>
-                        <p className="text-sm text-muted-foreground">{training.date} • {training.duration}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {training.date} • {training.duration}
+                        </p>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">

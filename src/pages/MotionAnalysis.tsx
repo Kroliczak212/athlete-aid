@@ -1,16 +1,7 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { 
-  Camera, 
-  Video, 
-  Brain, 
-  Upload, 
-  Play,
-  Settings,
-  BarChart3,
-  AlertCircle
-} from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Camera, Video, Brain, Upload, Play, Settings, BarChart3, AlertCircle } from 'lucide-react';
 
 export default function MotionAnalysis() {
   return (
@@ -33,10 +24,13 @@ export default function MotionAnalysis() {
           <Brain className="h-16 w-16 mx-auto text-primary mb-4" />
           <h2 className="text-2xl font-bold mb-4">Analiza Ruchu AI</h2>
           <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
-            Przyszłość analizy sportowej - automatyczne rozpoznawanie i ocena techniki ruchu 
-            z wykorzystaniem najnowszych algorytmów sztucznej inteligencji i wizji komputerowej.
+            Przyszłość analizy sportowej - automatyczne rozpoznawanie i ocena techniki ruchu z
+            wykorzystaniem najnowszych algorytmów sztucznej inteligencji i wizji komputerowej.
           </p>
-          <Button size="lg" className="bg-primary hover:bg-sport-hover text-primary-foreground shadow-sport">
+          <Button
+            size="lg"
+            className="bg-primary hover:bg-sport-hover text-primary-foreground shadow-sport"
+          >
             <AlertCircle className="mr-2 h-5 w-5" />
             Powiadom o dostępności
           </Button>
@@ -49,9 +43,7 @@ export default function MotionAnalysis() {
           <CardHeader>
             <Camera className="h-8 w-8 text-primary mb-2" />
             <CardTitle>Analiza w Czasie Rzeczywistym</CardTitle>
-            <CardDescription>
-              Natychmiastowa analiza techniki podczas treningu
-            </CardDescription>
+            <CardDescription>Natychmiastowa analiza techniki podczas treningu</CardDescription>
           </CardHeader>
           <CardContent>
             <ul className="space-y-2 text-sm text-muted-foreground">
@@ -67,9 +59,7 @@ export default function MotionAnalysis() {
           <CardHeader>
             <Video className="h-8 w-8 text-primary mb-2" />
             <CardTitle>Analiza Nagrań</CardTitle>
-            <CardDescription>
-              Szczegółowa ocena nagranych sesji treningowych
-            </CardDescription>
+            <CardDescription>Szczegółowa ocena nagranych sesji treningowych</CardDescription>
           </CardHeader>
           <CardContent>
             <ul className="space-y-2 text-sm text-muted-foreground">
@@ -85,9 +75,7 @@ export default function MotionAnalysis() {
           <CardHeader>
             <BarChart3 className="h-8 w-8 text-primary mb-2" />
             <CardTitle>Raporty i Progres</CardTitle>
-            <CardDescription>
-              Śledzenie poprawy techniki w czasie
-            </CardDescription>
+            <CardDescription>Śledzenie poprawy techniki w czasie</CardDescription>
           </CardHeader>
           <CardContent>
             <ul className="space-y-2 text-sm text-muted-foreground">
@@ -107,9 +95,7 @@ export default function MotionAnalysis() {
             <Play className="h-5 w-5 text-primary" />
             Podgląd Interfejsu
           </CardTitle>
-          <CardDescription>
-            Tak będzie wyglądać moduł analizy ruchu po uruchomieniu
-          </CardDescription>
+          <CardDescription>Tak będzie wyglądać moduł analizy ruchu po uruchomieniu</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="bg-sport-accent rounded-lg p-8 text-center">
@@ -130,12 +116,10 @@ export default function MotionAnalysis() {
                 <p className="text-xs text-muted-foreground">Otrzymaj wyniki</p>
               </div>
             </div>
-            
+
             <div className="border-2 border-dashed border-border rounded-lg p-12 bg-background/50">
               <Camera className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <p className="text-lg font-medium text-muted-foreground">
-                Obszar analizy video
-              </p>
+              <p className="text-lg font-medium text-muted-foreground">Obszar analizy video</p>
               <p className="text-sm text-muted-foreground">
                 Tutaj pojawi się player video z nałożonymi punktami analizy ruchu
               </p>

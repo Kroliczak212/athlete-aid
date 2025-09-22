@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -7,27 +7,27 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { MessageSquare, Send } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+} from '@/components/ui/select';
+import { MessageSquare, Send } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 const messageTypes = [
-  "Pytanie ogólne",
-  "Problem z treningiem",
-  "Zmiana terminu",
-  "Kontuzja/dolegliwość",
-  "Prośba o feedback",
-  "Inne"
+  'Pytanie ogólne',
+  'Problem z treningiem',
+  'Zmiana terminu',
+  'Kontuzja/dolegliwość',
+  'Prośba o feedback',
+  'Inne',
 ];
 
 interface MessageToTrainerDialogProps {
@@ -37,20 +37,20 @@ interface MessageToTrainerDialogProps {
 export function MessageToTrainerDialog({ children }: MessageToTrainerDialogProps) {
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
-    subject: "",
-    type: "",
-    message: "",
+    subject: '',
+    type: '',
+    message: '',
   });
   const { toast } = useToast();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     toast({
-      title: "Wiadomość wysłana",
-      description: "Twoja wiadomość została przekazana do trenera. Otrzymasz odpowiedź wkrótce.",
+      title: 'Wiadomość wysłana',
+      description: 'Twoja wiadomość została przekazana do trenera. Otrzymasz odpowiedź wkrótce.',
     });
     setOpen(false);
-    setFormData({ subject: "", type: "", message: "" });
+    setFormData({ subject: '', type: '', message: '' });
   };
 
   return (
@@ -76,18 +76,18 @@ export function MessageToTrainerDialog({ children }: MessageToTrainerDialogProps
             <Input
               id="message-subject"
               value={formData.subject}
-              onChange={(e) => setFormData(prev => ({ ...prev, subject: e.target.value }))}
+              onChange={(e) => setFormData((prev) => ({ ...prev, subject: e.target.value }))}
               placeholder="Krótki opis tematu..."
               required
               className="border-input bg-background"
             />
           </div>
-          
+
           <div className="space-y-2">
             <Label htmlFor="message-type">Typ wiadomości</Label>
-            <Select 
-              value={formData.type} 
-              onValueChange={(value) => setFormData(prev => ({ ...prev, type: value }))}
+            <Select
+              value={formData.type}
+              onValueChange={(value) => setFormData((prev) => ({ ...prev, type: value }))}
               required
             >
               <SelectTrigger className="border-input bg-background">
@@ -102,30 +102,30 @@ export function MessageToTrainerDialog({ children }: MessageToTrainerDialogProps
               </SelectContent>
             </Select>
           </div>
-          
+
           <div className="space-y-2">
             <Label htmlFor="message-content">Wiadomość</Label>
             <Textarea
               id="message-content"
               value={formData.message}
-              onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
+              onChange={(e) => setFormData((prev) => ({ ...prev, message: e.target.value }))}
               placeholder="Opisz szczegółowo swoją wiadomość..."
               rows={5}
               required
               className="border-input bg-background resize-none"
             />
           </div>
-          
+
           <div className="flex justify-end gap-3 pt-4">
-            <Button 
-              type="button" 
-              variant="outline" 
+            <Button
+              type="button"
+              variant="outline"
               onClick={() => setOpen(false)}
               className="border-border"
             >
               Anuluj
             </Button>
-            <Button 
+            <Button
               type="submit"
               className="bg-primary hover:bg-sport-hover text-primary-foreground"
             >

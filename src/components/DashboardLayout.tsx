@@ -1,7 +1,7 @@
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "./AppSidebar";
-import { UserHeader } from "./UserHeader";
-import { Outlet } from "react-router-dom";
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { AppSidebar } from './AppSidebar';
+import { UserHeader } from './UserHeader';
+import { Outlet } from 'react-router-dom';
 
 export function DashboardLayout() {
   return (

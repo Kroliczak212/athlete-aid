@@ -1,25 +1,11 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-import {
-  setAuthTokenGetter,
-  setOnUnauthorized,
-} from "../api/client/interceptors";
-import {
-  loadSession,
-  saveSession,
-  clearSession,
-  getAccessToken,
-} from "./session";
-import { useProfile } from "../api/queries/auth/useProfile";
-import { queryClient } from "../api/queries/queryClient";
-import { AuthAPI } from "../api/endpoints/auth.api";
+import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { setAuthTokenGetter, setOnUnauthorized } from '../api/client/interceptors';
+import { loadSession, saveSession, clearSession, getAccessToken } from './session';
+import { useProfile } from '../api/queries/auth/useProfile';
+import { queryClient } from '../api/queries/queryClient';
+import { AuthAPI } from '../api/endpoints/auth.api';
 
-import type { User } from "../api/schemas/auth.schema";
+import type { User } from '../api/schemas/auth.schema';
 
 type Tokens = { accessToken: string; refreshToken?: string | null };
 
@@ -42,7 +28,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           accessToken: initial.accessToken,
           refreshToken: initial.refreshToken ?? null,
         }
-      : null
+      : null,
   );
 
   // rejestrujemy interceptory klienta HTTP
@@ -87,7 +73,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setTokens,
       logout,
     }),
-    [user, isLoadingUser, tokens]
+    [user, isLoadingUser, tokens],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
@@ -95,7 +81,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
 export function useAuthContext() {
   const ctx = useContext(AuthContext);
-  if (!ctx)
-    throw new Error("useAuthContext must be used within <AuthProvider>");
+  if (!ctx) throw new Error('useAuthContext must be used within <AuthProvider>');
   return ctx;
 }

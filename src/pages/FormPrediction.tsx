@@ -1,6 +1,6 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, Brain, Clock } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft, Brain, Clock } from 'lucide-react';
 
 export default function FormPrediction() {
   const handleBack = () => {
@@ -16,9 +16,7 @@ export default function FormPrediction() {
         </Button>
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Predykcja Formy</h1>
-          <p className="text-muted-foreground">
-            AI-powered przewidywanie wydajności sportowej
-          </p>
+          <p className="text-muted-foreground">AI-powered przewidywanie wydajności sportowej</p>
         </div>
       </div>
 
@@ -31,11 +29,12 @@ export default function FormPrediction() {
                 <Clock className="h-6 w-6 text-muted-foreground absolute -bottom-1 -right-1" />
               </div>
             </div>
-            
+
             <div className="space-y-3">
               <h2 className="text-2xl font-bold">Wkrótce dostępne!</h2>
               <p className="text-muted-foreground">
-                Pracujemy nad zaawansowanym systemem AI, który będzie przewidywać formę sportową na podstawie:
+                Pracujemy nad zaawansowanym systemem AI, który będzie przewidywać formę sportową na
+                podstawie:
               </p>
             </div>
 

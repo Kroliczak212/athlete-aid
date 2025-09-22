@@ -86,7 +86,6 @@ export function AddAthleteDialog() {
             <Select 
               value={formData.sport} 
               onValueChange={(value) => setFormData(prev => ({ ...prev, sport: value }))}
-              required
             >
               <SelectTrigger className="border-input bg-background">
                 <SelectValue placeholder="Wybierz sport" />

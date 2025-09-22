@@ -65,11 +65,11 @@ const mockStats = [
 
 export default function CRMDashboard() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [sportFilter, setSportFilter] = useState("");
+  const [sportFilter, setSportFilter] = useState("all");
   
   const filteredAthletes = mockAthletes.filter(athlete => {
     const matchesSearch = athlete.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesSport = !sportFilter || athlete.sport === sportFilter;
+    const matchesSport = !sportFilter || sportFilter === "all" || athlete.sport === sportFilter;
     return matchesSearch && matchesSport;
   });
 
@@ -128,7 +128,7 @@ export default function CRMDashboard() {
               <SelectValue placeholder="Filtruj po sporcie" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Wszystkie sporty</SelectItem>
+              <SelectItem value="all">Wszystkie sporty</SelectItem>
               {uniqueSports.map((sport) => (
                 <SelectItem key={sport} value={sport}>
                   {sport}

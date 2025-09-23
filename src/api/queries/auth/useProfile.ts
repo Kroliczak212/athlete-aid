@@ -1,11 +1,10 @@
-import { useQuery } from '@tanstack/react-query';
-import { AuthAPI } from '../../endpoints/auth.api';
+// src/api/queries/auth/useProfile.ts
+import { useMe } from "./useMe";
 
+/** Zachowujemy istniejące importy w kodzie, ale realnie korzystamy z nowego useMe */
 export function useProfile(opts?: { enabled?: boolean }) {
-  return useQuery({
-    queryKey: ['me'],
-    queryFn: () => AuthAPI.me(),
-    enabled: opts?.enabled ?? true,
-    staleTime: 30_000,
-  });
+  const q = useMe();
+  // respektuj ewentualny parametr enabled (opcjonalnie)
+  // jeśli gdzieś masz użyty opts.enabled, to zamiast tego pilnuj enabled w useMe na podstawie accessToken.
+  return q;
 }

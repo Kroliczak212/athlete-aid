@@ -1,12 +1,19 @@
-// src/auth/AuthProvider.tsx
-import React, { createContext, useCallback, useEffect, useMemo, useState } from 'react';
-import type { Me } from '@/api/schemas/auth';
+import React, {
+  createContext,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import type { Me } from "@/api/schemas/auth";
 import {
   setAuthTokenGetter,
   setOnUnauthorized,
   setAuthTokenSetter,
-} from '@/api/client/interceptors';
-import { API_URL } from '@/api/client/config';
+} from "@/api/client/interceptors";
+
+const LS_ACCESS = "access_token";
+const LS_TYPE = "token_type";
 
 type AuthState = {
   accessToken: string | null;
@@ -20,14 +27,18 @@ type AuthContextValue = {
   isAuthenticated: boolean;
   isReady: boolean;
   user: Me | null;
-  setTokens: (p: { accessToken: string; tokenType?: string; persist?: boolean }) => void;
+  setTokens: (p: {
+    accessToken: string;
+    tokenType?: string;
+    persist?: boolean;
+  }) => void;
   setUser: (u: Me | null) => void;
   logout: () => void;
 };
 
 export const AuthContext = createContext<AuthContextValue>({
   accessToken: null,
-  tokenType: 'Bearer',
+  tokenType: "Bearer",
   isAuthenticated: false,
   isReady: false,
   user: null,
@@ -36,10 +47,12 @@ export const AuthContext = createContext<AuthContextValue>({
   logout: () => {},
 });
 
-export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
+export const AuthProvider: React.FC<React.PropsWithChildren> = ({
+  children,
+}) => {
   const [auth, setAuth] = useState<AuthState>({
     accessToken: null,
-    tokenType: 'Bearer',
+    tokenType: "Bearer",
     user: null,
   });
   const [isReady, setIsReady] = useState(false);
@@ -47,95 +60,88 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
   const setTokens = useCallback(
     ({
       accessToken,
-      tokenType = 'Bearer',
-      persist = false,
+      tokenType = "Bearer",
+      persist = true,
     }: {
       accessToken: string;
       tokenType?: string;
       persist?: boolean;
     }) => {
       setAuth((s) => ({ ...s, accessToken, tokenType, user: null }));
-      if (persist) {
-        localStorage.setItem('access_token', accessToken);
-        localStorage.setItem('token_type', tokenType);
-      } else {
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('token_type');
+      try {
+        if (persist) {
+          localStorage.setItem(LS_ACCESS, accessToken);
+          localStorage.setItem(LS_TYPE, tokenType);
+        } else {
+          localStorage.removeItem(LS_ACCESS);
+          localStorage.removeItem(LS_TYPE);
+        }
+      } catch {
+        /* ignore */
       }
     },
-    [],
+    []
   );
 
-  const setUser = useCallback((u: Me | null) => setAuth((s) => ({ ...s, user: u })), []);
+  const setUser = useCallback(
+    (u: Me | null) => setAuth((s) => ({ ...s, user: u })),
+    []
+  );
 
   const logout = useCallback(() => {
-    setAuth({ accessToken: null, tokenType: 'Bearer', user: null });
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('token_type');
-    localStorage.removeItem('refresh_token');
-    localStorage.removeItem('user_email');
+    setAuth({ accessToken: null, tokenType: "Bearer", user: null });
+    try {
+      localStorage.removeItem(LS_ACCESS);
+      localStorage.removeItem(LS_TYPE);
+    } catch {
+      /* ignore */
+    }
   }, []);
 
-  // Rejestracja integracji z klientem HTTP
+  // Integracja z klientem HTTP (token getter/setter, reakcja na 401)
   useEffect(() => {
     setAuthTokenGetter(() => auth.accessToken);
     setAuthTokenSetter((token, tokenType) => {
       if (token) {
-        setTokens({ accessToken: token, tokenType: tokenType ?? 'Bearer', persist: false });
+        setTokens({
+          accessToken: token,
+          tokenType: tokenType ?? "Bearer",
+          persist: true,
+        });
       } else {
         logout();
       }
     });
-    // KLUCZOWA ZMIANA ↓
     setOnUnauthorized(logout);
   }, [auth.accessToken, logout, setTokens]);
 
-  // Sync między kartami
+  // Sync między kartami (dot. localStorage)
   useEffect(() => {
     const onStorage = (e: StorageEvent) => {
-      if (e.key === 'access_token' || e.key === 'token_type') {
-        const tok = localStorage.getItem('access_token');
-        const typ = localStorage.getItem('token_type') || 'Bearer';
-        setAuth((s) => ({ ...s, accessToken: tok, tokenType: typ, user: null }));
+      if (e.key === LS_ACCESS || e.key === LS_TYPE) {
+        const tok = localStorage.getItem(LS_ACCESS);
+        const typ = localStorage.getItem(LS_TYPE) || "Bearer";
+        setAuth((s) => ({
+          ...s,
+          accessToken: tok,
+          tokenType: typ,
+          user: null,
+        }));
       }
     };
-    window.addEventListener('storage', onStorage);
-    return () => window.removeEventListener('storage', onStorage);
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
   }, []);
 
-  // Hydratacja + BOOTSTRAP REFRESH (HttpOnly cookie)
+  // Hydratacja po F5: bierzemy tylko z localStorage (brak refresh).
   useEffect(() => {
-    (async () => {
-      const tok = localStorage.getItem('access_token');
-      const typ = localStorage.getItem('token_type') || 'Bearer';
-      if (tok) {
-        setAuth((s) => ({ ...s, accessToken: tok, tokenType: typ }));
-        setIsReady(true);
-        return;
-      }
-      // brak access w LS -> spróbuj odświeżyć z cookie
-      try {
-        const res = await fetch(`${API_URL}/api/v1/auth/refresh`, {
-          method: 'POST',
-          credentials: 'include',
-        });
-        if (res.ok) {
-          const data: any = await res.json().catch(() => null);
-          if (data?.access_token) {
-            setTokens({
-              accessToken: data.access_token,
-              tokenType: data.token_type ?? 'Bearer',
-              persist: false,
-            });
-          }
-        }
-      } catch {
-        // ignore
-      } finally {
-        setIsReady(true);
-      }
-    })();
-  }, [setTokens]);
+    const tok = localStorage.getItem(LS_ACCESS);
+    const typ = localStorage.getItem(LS_TYPE) || "Bearer";
+    if (tok) {
+      setAuth((s) => ({ ...s, accessToken: tok, tokenType: typ }));
+    }
+    setIsReady(true);
+  }, []);
 
   const value = useMemo<AuthContextValue>(
     () => ({
@@ -148,7 +154,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
       setUser,
       logout,
     }),
-    [auth, isReady, setTokens, setUser, logout],
+    [auth, isReady, setTokens, setUser, logout]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
